@@ -1,4 +1,6 @@
 $(function() {
+	const MAX_IN_ROOM = 4;
+	
 
     var fbDataRef = new Firebase('https://snl-room.firebaseio.com/');
 
@@ -12,7 +14,9 @@ $(function() {
     var roomId = "testRoom1";
     var playerId = "testPlayer1";
     var avatar = 1;
-
+	var states = ["idle", "active"]
+	var state = states[0];
+    
     var currentRoom = {};
     var currentRoomPlayers = {};
 
@@ -49,8 +53,19 @@ $(function() {
 			playerRef.child(roomId).on('value', function(snapshot) {
 				currentRoomPlayers = snapshot.val();
 			});
-			
+
             displayMessage("ROOM " + roomId + " WAS JOINED SUCCESSFULLY");
+        } else {
+        	displayError("THE ROOM DOESN'T EXIST");
+        }
+    }
+
+
+	function joinRoomExistsCallback(roomId, exists) {
+ 		if (exists) {
+            // check if i can join the room
+			var player = $("#playerId").val();
+			checkIfPlayerExistsInRoom(roomId, player);
         } else {
         	displayError("THE ROOM DOESN'T EXIST");
         }
@@ -74,17 +89,34 @@ $(function() {
     function playerExistsCallback(roomId, playerId, exists) {
         if (exists) {
             // check if i can join the room
-            alert('sorry, ' + playerId + ' exists already in room ' + roomId + '!');
+            displayError("SORRY " + playerId + " ALREADY EXISTS IN ROOM " + roomId);
         } else {
-            // create the room
-            var playersRef = new Firebase(playerUrl);
-            playersRef.child(roomId).child(playerId).set({
-                name: playerId,
-                active: true,
-                avatar: 1,
-                position: 0
-            });
-            alert('player ' + playerId + ' created');
+
+			var playerRef = new Firebase(playerUrl);
+
+			playerRef.child(roomId).on('value', function(snapshot) {
+				currentRoomPlayers = snapshot.val();
+			});
+
+			console.log();
+
+			if (Object.keys(currentRoomPlayers).length < MAX_IN_ROOM) {
+				// create the player
+	            var playersRef = new Firebase(playerUrl);
+	            playersRef.child(roomId).child(playerId).set({
+	                name: playerId,
+	                active: true,
+	                avatar: 1,
+	                position: 0
+	            });
+
+	            displayMessage("ROOM " + roomId + " JOINED SUCCESSFULLY AS " + playerId);
+			} else {
+				displayError("THERE ARE TOO MANY PEOPLE IN " + roomId)
+			}
+          	
+            
+            
         }
     }
 
@@ -146,7 +178,7 @@ $(function() {
     $("#room-create").on("click", function(e) {
     	e.preventDefault();
     	var room = $("#roomId").val();
-    	if (room.length < 4) {
+    	if (room.trim().length < 4) {
     		displayError("ROOM NAME MUST BE LONGER THAT 3 CHARACTERS");
     		return;
     	} 
@@ -158,16 +190,29 @@ $(function() {
     $("#room-join").on("click", function(e) {
     	e.preventDefault();
     	var room = $("#roomId").val();
+
+    	// make sure the room is valid
+    	if (room.trim().length < 4) {
+    		displayError("ROOM NAME MUST BE VALID");
+    		return;
+    	}
+
     	var player = $("#playerId").val();
 
-    	alert("try to join the room " + room + " as player " + player);
+    	if (player.trim().length < 4) {
+    		displayError("PLAYER NAME MUST BE VALID");
+    		return;
+    	}
+
+    	checkIfRoomExists(room, joinRoomExistsCallback);
+
     });
 
     $("#room-join-board").on("click", function(e) {
     	e.preventDefault();
     	
     	var room = $("#roomId").val();
-    	if (room.length < 4) {
+    	if (room.trim().length < 4) {
     		displayError("ROOM NAME MUST BE VALID");
     		return;
     	}
