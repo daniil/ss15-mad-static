@@ -112,8 +112,6 @@
                     game.playerId = playerId;
                     game.roomId = roomId;
 
-                    
-
                     // get the avatar
                     var avatar = $("#avatar").val();
 
@@ -158,6 +156,11 @@
                     });
                     
                     roomsRef.on("child_changed", this.onActiveRoomChanged);
+
+                    fb.playersRef.once('value', function(snapshot) {
+                        game.activePlayers = snapshot.val();
+                        game.showPlayersInRoom();
+                    });
 
                     game.displayMessage("ROOM " + roomId + " JOINED SUCCESSFULLY AS " + playerId);
                 } else {

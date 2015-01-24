@@ -29,14 +29,14 @@
                 });
             }
 
-            this.getTileArm(this.player_index);
-            this.setBirdToTile(this.player_index);
+            // this.getTileArm(this.player_index);
+            // this.setBirdToTile(this.player_index);
 
         },
 
-        addPlayer: function(playerId, avatar) {
+        addPlayer: function(playerId, avatar, position) {
 
-            var playerDiv = $("<div id='" + playerId + "' class='" + avatar + "'>");
+            var playerDiv = $("<div data-index='" + position + "' id='" + playerId + "' class='" + avatar + "'>");
             
             $("#players").append(playerDiv);
 
@@ -48,28 +48,42 @@
             $('#' + playerId).on("click", function(event) {
                 $(this).spToggle();
             });
+
+            this.getTileArm(position);
+            this.setBirdToTile(position);
+            
+            var paddedTile = this.pad(position+ 1, 2) ;
+
+            $('#' + playerId).css("left", $("#tile-" + paddedTile).offset().left);
+            $('#' + playerId).css("top", $("#tile-" + paddedTile).offset().top);
+
         },
 
         movePlayer: function(playerId, targetIndex) {
 
             this.activePlayer = playerId;
+            this.targetIndex = targetIndex;
 
             this.moveBird();
         },
 
         goToEnd: function() {
 
-            var tile_tally = 0;
+            var pindex = $("#" + this.activePlayer).data("index");
 
+            var tile_tally = 0;
+            
             for (var i in this.tileArmLength) {
 
                 // console.log(player_index, i);
-                if (tile_tally > this.player_index) {
+                // if (tile_tally > this.player_index) {
+                if (tile_tally > pindex) {
 
                     // tile_tally -= tileArmLength[i];
                     var tile_end = tile_tally;
                     // console.log("Result", i, player_index, tile_end - 1);
-                    if (this.player_index == tile_end) {
+                    if (pindex == tile_end) {
+                    // if (this.player_index == tile_end) {
                         tile_end += this.tileArmLength[i];
                     }
 
@@ -84,8 +98,10 @@
         setBirdToTile: function(tile) {
 
             this.player_index = tile;
+            $("#" + this.activePlayer).data("index", tile);
+            // console.log($("#" + this.activePlayer).data("index"));
             tile += 1;
-            //$("#bird").offset($("#tile-"+pad(tile, 2)).offset());
+            
             TweenMax.to($("#" + this.activePlayer), 1, {
                 left: $("#tile-" + this.pad(tile, 2)).offset().left,
                 top: $("#tile-" + this.pad(tile, 2)).offset().top,
@@ -95,12 +111,13 @@
         },
 
         moveBird: function() {
+            var pindex = $("#" + board.activePlayer).data("index");
 
-            if (board.targetIndex - 1 == board.player_index) {
+            if (board.targetIndex - 1 == pindex) {
                 return;
             }
             
-            if (board.getTileArm(board.player_index) == board.getTileArm(board.targetIndex)) {
+            if (board.getTileArm(pindex) == board.getTileArm(board.targetIndex)) {
                 console.log("Go Directly");
                 board.setBirdToTile(board.targetIndex - 1);
             } else {
