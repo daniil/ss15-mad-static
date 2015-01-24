@@ -112,8 +112,6 @@
                     game.playerId = playerId;
                     game.roomId = roomId;
 
-                    
-
                     // get the avatar
                     var avatar = $("#avatar").val();
 
