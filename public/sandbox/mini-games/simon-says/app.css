@@ -1,3 +1,7 @@
+.simon-says-game {
+  display: none;
+}
+
 .simon-says-steps {
   margin-bottom: 1em;
   font-size: 1.2em;

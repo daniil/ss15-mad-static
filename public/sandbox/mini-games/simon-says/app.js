@@ -1,17 +1,64 @@
 $(function() {
-  var $container = $('#simon-says-container'),
+  var fbRef = new Firebase("https://snl-room-simon-says.firebaseio.com"),
+      players = {},
+      $container = $('#simon-says-container'),
       gridClass = 'simon-says-grid-block',
       grid = '',
-      currStep = 3,
       currMove = [],
-      currGameMode = 'lead';
+      currRole = '',
+      currStep,
+      fbPlayerRef,
+      playerId;
+
+  fbPlayerRef = fbRef.child('players').push({
+    score: 0
+  });
+
+  fbPlayerRef.on('value', function(s) {
+    playerId = s.key();
+    currRole = s.val().role;
+
+    if (s.val().role === 'lead') {
+
+      $('.simon-says-role').html('<p>You\'re in <span class="simon-says-role-type">lead</span> role.</p><p>Tap out your pattern!</p>');
+
+    } else if (s.val().role === 'wait') {
+
+      $('.simon-says-role').html('<p>You\'re in <span class="simon-says-role-type">follow</span> role.</p><p>Wait until the lead taps out a pattern.</p>');
+
+    }
+
+    updateUI();
+  });
+
+  fbPlayerRef.onDisconnect().remove();
+
+  fbRef.child('settings').once('value', function(s) {
+    currStep = s.startingSteps;
+  });
+
+  fbRef.child('players').once('value', function(s) {
+    if (Object.keys(s.val()).length === 1) {
+      fbPlayerRef.update({ 'role': 'lead' });
+    } else {
+      fbPlayerRef.update({ 'role': 'wait' });
+    }
+  });
+
+  fbRef.child('players').on('child_added', function(s) {
+    players[s.key()] = s.val();
+    updateUI();
+  });
+
+  fbRef.child('moves').on('child_added', function(s) {
+    console.log('Move made', s.val());
+  });
 
   for (var i = 0; i < 25; i++) {
     grid += '<div class="' + gridClass + '" id="' + gridClass + '_' + i + '" data-grid-id="' + i + '"></div>';
   }
 
   $container.html(grid);
-  updateUI();
 
   $('.' + gridClass).hammer().bind('tap', function(e) {
     if (currStep === 0) return;
@@ -31,10 +78,18 @@ $(function() {
 
     if (currStep === 0) {
       $('.' + gridClass).addClass('inactive');
-      runDelayedFn(1000, playbackMove);
+      makeMove();
     }
 
-    updateUI();
+    $('.simon-says-steps-counter').text(currStep);
+  }
+
+  function makeMove() {
+    fbRef.child('moves').push({
+      player: playerId,
+      pattern: currMove,
+      type: currRole
+    });
   }
 
   function playbackMove() {
@@ -47,7 +102,6 @@ $(function() {
     });
 
     runDelayedFn((currMove.length * 750) + 200, function() {
-      currGameMode = 'follow';
       currStep = currMove.length;
       updateUI();
     });
@@ -63,7 +117,16 @@ $(function() {
   }
 
   function updateUI() {
-    $('.simon-says-steps-counter').text(currStep);
+    fbRef.child('players').once('value', function(s) {
+      if (Object.keys(s.val()).length === 2) {
+        $('.simon-says-lobby').hide();
+        $('.simon-says-game').show();
+      }
+    });
+
+    if (currRole === 'wait') {
+      $('.' + gridClass).addClass('inactive');
+    }
   }
 
   function runDelayedFn(delay, fn) {
