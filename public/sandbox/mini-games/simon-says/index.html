@@ -3,9 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <title></title>
+  <script src="https://cdn.firebase.com/js/client/2.1.1/firebase.js"></script>
+  <script src="../../../bower_components/jquery/dist/jquery.min.js"></script>
+  <script src="../../../bower_components/hammer.js/hammer.min.js"></script>
+  <script src="../../../bower_components/jquery.hammer.js/jquery.hammer.js"></script>
   <script src="app.js"></script>
+  <link rel="stylesheet" type="text/css" href="../../../css/app.css">
+  <link rel="stylesheet" type="text/css" href="app.css">
 </head>
 <body>
-  
+  <div class="simon-says-steps">
+    Pattern steps left: <span class="simon-says-steps-counter"></span>
+  </div>
+  <div id="simon-says-container" class="simon-says-container clearfix"></div>
 </body>
 </html>
