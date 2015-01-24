@@ -6,7 +6,12 @@ $(function() {
       grid = '',
       currMove = [],
       currRole = '',
-      currStep,
+      steps = {
+        starting: 3,
+        roundStep: 2,
+        currStep: 3,
+        round: 0
+      },
       fbPlayerRef,
       playerId;
 
@@ -24,7 +29,11 @@ $(function() {
 
     } else if (s.val().role === 'wait') {
 
-      $('.simon-says-role').html('<p>You\'re in <span class="simon-says-role-type">follow</span> role.</p><p>Wait until the lead taps out a pattern.</p>');
+      $('.simon-says-role').html('<p>You\'re in <span class="simon-says-role-type">wait</span> role.</p><p>Wait until your opponent taps out a pattern.</p>');
+
+    } else if (s.val().role === 'follow') {
+
+      $('.simon-says-role').html('<p>You\'re in <span class="simon-says-role-type">follow</span> role.</p><p>Repeat the pattern.</p>');
 
     }
 
@@ -32,10 +41,6 @@ $(function() {
   });
 
   fbPlayerRef.onDisconnect().remove();
-
-  fbRef.child('settings').once('value', function(s) {
-    currStep = s.startingSteps;
-  });
 
   fbRef.child('players').once('value', function(s) {
     if (Object.keys(s.val()).length === 1) {
@@ -52,36 +57,87 @@ $(function() {
 
   fbRef.child('moves').on('child_added', function(s) {
     console.log('Move made', s.val());
+
+    if (s.val().type === 'lead') {
+      if (currRole === 'lead') {
+        fbPlayerRef.update({
+          role: 'wait'
+        });
+      } else if (currRole === 'wait') {
+        fbPlayerRef.update({
+          role: 'follow'
+        });
+        currMove = s.val().pattern;
+        runDelayedFn(3000, playbackMove);
+      }
+    } else if (s.val().type === 'follow') {
+      if (currRole === 'follow') {
+        fbPlayerRef.update({
+          role: 'lead'
+        });
+        currMove = [];
+      }
+      steps.round++;
+    }
+
+    steps.currStep = steps.starting + (steps.round * steps.roundStep);
+    updateStepsUI();
   });
+
+  fbRef.child('moves').onDisconnect().remove();
 
   for (var i = 0; i < 25; i++) {
     grid += '<div class="' + gridClass + '" id="' + gridClass + '_' + i + '" data-grid-id="' + i + '"></div>';
   }
 
   $container.html(grid);
+  updateStepsUI();
 
   $('.' + gridClass).hammer().bind('tap', function(e) {
-    if (currStep === 0) return;
+    var returnImmediate = false;
+
+    if (steps.currStep === 0) return;
     
-    currMove.push($(e.target).data('grid-id'));
+    if (currRole === 'lead') {
+      currMove.push($(e.target).data('grid-id'));
+    } else if (currRole === 'follow') {
+      // Wrong pattern, return immediately and score +1 to opponent
+      if (currMove[currMove.length - steps.currStep] !== $(e.target).data('grid-id')) {
+        $(e.target).addClass('wrong');
+        runDelayedFn(500, function() {
+          $(e.target).removeClass('wrong');
+        });
+        updateScore(false);
+        returnImmediate = true;
+      }
+    }
 
-    $(e.target).addClass('active');
-    runDelayedFn(200, function() {
-      $(e.target).removeClass('active');
-    });
+    if (!returnImmediate) {
+      $(e.target).addClass('active');
+      runDelayedFn(200, function() {
+        $(e.target).removeClass('active');
+      });
 
-    runDelayedFn(500, updateSteps);
+      runDelayedFn(500, updateSteps);
+    } else {
+      steps.currStep = 1;
+      updateSteps();
+    }
+    
   });
 
   function updateSteps() {
-    currStep --;
+    steps.currStep --;
 
-    if (currStep === 0) {
-      $('.' + gridClass).addClass('inactive');
+    if (steps.currStep === 0) {
+      if (currRole === 'follow') {
+        updateScore(true);
+      }
+
       makeMove();
     }
 
-    $('.simon-says-steps-counter').text(currStep);
+    updateStepsUI();
   }
 
   function makeMove() {
@@ -102,7 +158,7 @@ $(function() {
     });
 
     runDelayedFn((currMove.length * 750) + 200, function() {
-      currStep = currMove.length;
+      steps.currStep = currMove.length;
       updateUI();
     });
   }
@@ -116,6 +172,10 @@ $(function() {
     });   
   }
 
+  function updateStepsUI() {
+    $('.simon-says-steps-counter').text(steps.currStep);
+  }
+
   function updateUI() {
     fbRef.child('players').once('value', function(s) {
       if (Object.keys(s.val()).length === 2) {
@@ -126,7 +186,29 @@ $(function() {
 
     if (currRole === 'wait') {
       $('.' + gridClass).addClass('inactive');
+    } else if (currRole === 'lead' || currRole === 'follow') {
+      $('.' + gridClass).removeClass('inactive');
     }
+  }
+
+  function updateScore(isWinner) {
+    fbRef.child('players').once('value', function(s) {
+      $.each(s.val(), function(i, val) {
+        if (isWinner) {
+          if (i === playerId) {
+            fbRef.child('players').child(i).update({
+              score: val.score + 1
+            });
+          }
+        } else {
+          if (i !== playerId) {
+            fbRef.child('players').child(i).update({
+              score: val.score + 1
+            });
+          }
+        }
+      });
+    });
   }
 
   function runDelayedFn(delay, fn) {
