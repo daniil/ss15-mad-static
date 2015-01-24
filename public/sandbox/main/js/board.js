@@ -36,7 +36,7 @@
 
         addPlayer: function(playerId, avatar) {
 
-            var playerDiv = $("<div data-index='1' id='" + playerId + "' class='" + avatar + "'>");
+            var playerDiv = $("<div data-index='0' id='" + playerId + "' class='" + avatar + "'>");
             
             $("#players").append(playerDiv);
 
@@ -49,8 +49,8 @@
                 $(this).spToggle();
             });
 
-            this.getTileArm(1);
-            this.setBirdToTile(1);
+            this.getTileArm(0);
+            this.setBirdToTile(0);
 
         },
 

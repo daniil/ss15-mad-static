@@ -123,6 +123,8 @@
                         position: 0
                     }); 
 
+
+
                     // listen for changed to the players
                     this.playersRef.on("child_added", this.onPlayerAdded);
                     this.playersRef.on("child_changed", this.onPlayerChanged);
@@ -156,6 +158,11 @@
                     });
                     
                     roomsRef.on("child_changed", this.onActiveRoomChanged);
+
+                    fb.playersRef.once('value', function(snapshot) {
+                        game.activePlayers = snapshot.val();
+                        game.showPlayersInRoom();
+                    });
 
                     game.displayMessage("ROOM " + roomId + " JOINED SUCCESSFULLY AS " + playerId);
                 } else {
