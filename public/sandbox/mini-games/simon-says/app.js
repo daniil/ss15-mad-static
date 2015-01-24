@@ -4,14 +4,14 @@ $(function() {
       grid = '',
       currStep = 3,
       currMove = [],
-      isGameActive = true;
+      currGameMode = 'lead';
 
   for (var i = 0; i < 25; i++) {
     grid += '<div class="' + gridClass + '" id="' + gridClass + '_' + i + '" data-grid-id="' + i + '"></div>';
   }
 
   $container.html(grid);
-  $('.simon-says-steps-counter').text(currStep);
+  updateUI();
 
   $('.' + gridClass).hammer().bind('tap', function(e) {
     if (currStep === 0) return;
@@ -19,12 +19,11 @@ $(function() {
     currMove.push($(e.target).data('grid-id'));
 
     $(e.target).addClass('active');
-    var animationTimeout = setTimeout(function() {
+    runDelayedFn(200, function() {
       $(e.target).removeClass('active');
-      clearTimeout(animationTimeout);
-    }, 200);
+    });
 
-    updateSteps();
+    runDelayedFn(500, updateSteps);
   });
 
   function updateSteps() {
@@ -32,12 +31,10 @@ $(function() {
 
     if (currStep === 0) {
       $('.' + gridClass).addClass('inactive');
-      var playbackTimeout = setTimeout(function() {
-        playbackMove();
-      }, 1000);
+      runDelayedFn(1000, playbackMove);
     }
 
-    $('.simon-says-steps-counter').text(currStep);
+    updateUI();
   }
 
   function playbackMove() {
@@ -48,17 +45,32 @@ $(function() {
     $.each(currMove, function(i, val) {
       animateMove(i, val);
     });
+
+    runDelayedFn((currMove.length * 750) + 200, function() {
+      currGameMode = 'follow';
+      currStep = currMove.length;
+      updateUI();
+    });
   }
 
   function animateMove(i, val) {
-    var queueTimeout = setTimeout(function() {
+    runDelayedFn(i * 750, function() {
       $('.' + gridClass).eq(val).addClass('active');
-      var animationTimeout = setTimeout(function() {
+      runDelayedFn(250, function() {
         $('.' + gridClass).eq(val).removeClass('active');
-        clearTimeout(animationTimeout);
-      }, 250);
-      clearTimeout(queueTimeout);
-    }, i * 750);    
+      });
+    });   
+  }
+
+  function updateUI() {
+    $('.simon-says-steps-counter').text(currStep);
+  }
+
+  function runDelayedFn(delay, fn) {
+    var delayTimeout = setTimeout(function() {
+      fn();
+      clearTimeout(delayTimeout);
+    }, delay);
   }
 
 });
