@@ -3,10 +3,32 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>NOT Snakes and Ladders</title>
+  <title>Multiplayse Snakes and Ladders Test with Firebase</title>
+  <link rel="stylesheet" href="css/form.css">
 </head>
 <body>
-<iframe width="560" height="315" src="//www.youtube.com/embed/7PCkvCPvDXk" frameborder="0" allowfullscreen></iframe>  
+  <p id="message"></p>
+
+  <form id="game-setup">
+      <fieldset>
+        <p>
+          <label for="roomId">Room ID: </label>
+          <input type="text" name="roomId" id="roomId" />
+          <input type="button" name="room-create" id="room-create" value="create">
+        </p>
+      </fieldset>
+      <fieldset>
+        <p>
+          <label for="roomId">Player ID: </label>
+          <input type="text" name="playerId" id="playerId" />
+          <input type="button" name="room-join" id="room-join" value="join">
+        </p>
+        <p>
+          <input type="button" name="room-join-board" id="room-join-board" value="join-as-board">
+        </p>
+      </fieldset>
+  </form>
+
   <div id="rooms">
     app rooms:
     <ul id="all">

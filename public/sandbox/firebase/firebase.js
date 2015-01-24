@@ -13,34 +13,55 @@ $(function() {
     var playerId = "testPlayer1";
     var avatar = 1;
 
+    var currentRoom = {};
+    var currentRoomPlayers = {};
+
     // register a new room
-    function registerRoom() {
-        roomId = prompt('room id?', 'testRoom1');
-        checkIfRoomExists(roomId);
+    function registerRoom(room) {
+        // roomId = prompt('room id?', 'testRoom1');
+        roomId = room;
+        checkIfRoomExists(roomId, createRoomExistsCallback);
     }
 
     // room exist callback
-    function roomExistsCallback(roomId, exists) {
+    function createRoomExistsCallback(roomId, exists) {
         if (exists) {
             // check if i can join the room
-            alert('sorry, ' + roomId + ' exists already!');
+            displayError("THE ROOM ALREADY EXISTS");
         } else {
             // create the room
+
             var roomsRef = new Firebase(roomUrl);
             roomsRef.child(roomId).set({
                 name: roomId,
                 open: true
             });
-            alert('room ' + roomId + ' created');
+
+            displayMessage("ROOM " + roomId + " WAS CREATED SUCCESSFULLY");
+        }
+    }
+
+    function joinBoardRoomExistsCallback(roomId, exists) {
+ 		if (exists) {
+            // check if i can join the room
+            var playerRef = new Firebase(playerUrl);
+
+			playerRef.child(roomId).on('value', function(snapshot) {
+				currentRoomPlayers = snapshot.val();
+			});
+			
+            displayMessage("ROOM " + roomId + " WAS JOINED SUCCESSFULLY");
+        } else {
+        	displayError("THE ROOM DOESN'T EXIST");
         }
     }
 
     // check to see if a room exists
-    function checkIfRoomExists(roomId) {
+    function checkIfRoomExists(roomId, callback) {
         var roomsRef = new Firebase(roomUrl);
         roomsRef.child(roomId).once('value', function(snapshot) {
             var exists = (snapshot.val() !== null);
-            roomExistsCallback(roomId, exists);
+            callback(roomId, exists);
         });
     }
 
@@ -95,6 +116,10 @@ $(function() {
         });
     }
 
+    function joinRoom(playerId) {
+
+    }
+
     playersRef.on("child_changed", function(snapshot) {
         var changedPost = snapshot.val();
 
@@ -104,6 +129,54 @@ $(function() {
         }
 
     });
+
+    function displayMessage(message) {
+    	if ($("#message").hasClass("error")) $("#message").removeClass("error");
+
+        $("#message").html(message);
+    }
+
+    function displayError(message) {
+    	if (!$("#message").hasClass("error")) $("#message").addClass("error");
+        $("#message").html(message);
+    }
+
+    // work with controls on page
+
+    $("#room-create").on("click", function(e) {
+    	e.preventDefault();
+    	var room = $("#roomId").val();
+    	if (room.length < 4) {
+    		displayError("ROOM NAME MUST BE LONGER THAT 3 CHARACTERS");
+    		return;
+    	} 
+    	registerRoom(room);
+    	// alert("Try to create the room " + room);
+    });
+
+
+    $("#room-join").on("click", function(e) {
+    	e.preventDefault();
+    	var room = $("#roomId").val();
+    	var player = $("#playerId").val();
+
+    	alert("try to join the room " + room + " as player " + player);
+    });
+
+    $("#room-join-board").on("click", function(e) {
+    	e.preventDefault();
+    	
+    	var room = $("#roomId").val();
+    	if (room.length < 4) {
+    		displayError("ROOM NAME MUST BE VALID");
+    		return;
+    	}
+    	// if the room exists, then get the information from it, 
+    	// but don't create a player
+    	checkIfRoomExists(room, joinBoardRoomExistsCallback);
+    });
+
+
 
     // registerRoom();
     // registerRoom();
