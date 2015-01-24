@@ -60,6 +60,7 @@
                 fb.playersRef.on("child_changed", fb.onPlayerChanged);
 
                 var roomsRef = new Firebase(fb.roomUrl + "/" + roomId);
+                
                 roomsRef.on("child_changed", fb.onActiveRoomChanged);
                 roomsRef.once("value", function(snapshot) {
                     var val = snapshot.val();
@@ -67,6 +68,7 @@
                 })
                 
                 game.displayMessage("ROOM " + roomId + " WAS JOINED SUCCESSFULLY");
+
             } else {
                 game.displayError("THE ROOM DOESN'T EXIST");
             }
@@ -142,8 +144,6 @@
                         var newOrder = val.order || [];
                         newOrder.push (playerId);
                         
-                        game.updateOrder(val);
-
                         if (numPlayers == 3) {
                             roomsRef.set({
                                 name: roomId,
@@ -159,6 +159,9 @@
                                 currentPlayerTurn: 0
                             });
                         }
+
+                        
+                        game.updateOrder(val);
 
 
                     });
@@ -213,6 +216,8 @@
 
         onActiveRoomChanged: function(snapshot) {
             var data = snapshot.val();
+
+            game.updateTurn(data);
             console.log("ACTIVE ROOM CHANGED", data);
         },
 
