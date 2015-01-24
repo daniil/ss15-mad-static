@@ -1,3 +1,8 @@
+body,
+html {
+  color: #34495e;
+}
+
 .simon-says-game {
   display: none;
 }
@@ -10,6 +15,39 @@
 
 .simon-says-steps-counter {
   font-weight: bold;
+}
+
+.simon-says-score {
+  display: inline-block;
+  margin-bottom: 20px;
+  color: #34495e;
+  font-size: 1.5em;
+}
+
+.simon-says-score-mine,
+.simon-says-score-opp {
+  font-weight: bold;
+  color: #8e44ad;
+}
+
+.simon-says-game-timer {
+  display: inline-block;
+  margin: 0 0 20px 50px;
+  color: #34495e;
+  font-size: 1.5em;
+}
+
+.simon-says-game-timer-value {
+  color: #27ae60;
+  font-weight: bold;
+}
+
+.simon-says-game-timer-value.caution {
+  color: #f39c12;
+}
+
+.simon-says-game-timer-value.warning {
+  color: #c0392b;
 }
 
 .simon-says-grid-block {

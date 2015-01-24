@@ -1,6 +1,5 @@
 $(function() {
   var fbRef = new Firebase("https://snl-room-simon-says.firebaseio.com"),
-      players = {},
       $container = $('#simon-says-container'),
       gridClass = 'simon-says-grid-block',
       grid = '',
@@ -8,12 +7,15 @@ $(function() {
       currRole = '',
       steps = {
         starting: 3,
-        roundStep: 2,
+        roundStep: 1,
         currStep: 3,
-        round: 0
+        round: 0,
+        timeLimit: 60
       },
+      isInteractive = true,
       fbPlayerRef,
-      playerId;
+      playerId,
+      gameTimer;
 
   fbPlayerRef = fbRef.child('players').push({
     score: 0
@@ -25,15 +27,21 @@ $(function() {
 
     if (s.val().role === 'lead') {
 
-      $('.simon-says-role').html('<p>You\'re in <span class="simon-says-role-type">lead</span> role.</p><p>Tap out your pattern!</p>');
+      isInteractive = true;
+
+      $('.simon-says-role').html('<p>You\'re in <span class="simon-says-role-type">lead</span> role. Tap out your pattern!</p>');
 
     } else if (s.val().role === 'wait') {
 
-      $('.simon-says-role').html('<p>You\'re in <span class="simon-says-role-type">wait</span> role.</p><p>Wait until your opponent taps out a pattern.</p>');
+      isInteractive = false;
+
+      $('.simon-says-role').html('<p>You\'re in <span class="simon-says-role-type">wait</span> role. Wait until your opponent taps out a pattern.</p>');
 
     } else if (s.val().role === 'follow') {
 
-      $('.simon-says-role').html('<p>You\'re in <span class="simon-says-role-type">follow</span> role.</p><p>Repeat the pattern.</p>');
+      isInteractive = false;
+
+      $('.simon-says-role').html('<p>You\'re in <span class="simon-says-role-type">follow</span> role. Repeat the pattern.</p>');
 
     }
 
@@ -42,6 +50,7 @@ $(function() {
 
   fbPlayerRef.onDisconnect().remove();
 
+  // Setup initial roles, first join leads, other waits
   fbRef.child('players').once('value', function(s) {
     if (Object.keys(s.val()).length === 1) {
       fbPlayerRef.update({ 'role': 'lead' });
@@ -51,7 +60,6 @@ $(function() {
   });
 
   fbRef.child('players').on('child_added', function(s) {
-    players[s.key()] = s.val();
     updateUI();
   });
 
@@ -68,7 +76,7 @@ $(function() {
           role: 'follow'
         });
         currMove = s.val().pattern;
-        runDelayedFn(3000, playbackMove);
+        runDelayedFn(1000, playbackMove);
       }
     } else if (s.val().type === 'follow') {
       if (currRole === 'follow') {
@@ -76,6 +84,8 @@ $(function() {
           role: 'lead'
         });
         currMove = [];
+      } else if (currRole === 'wait') {
+        updateUI();
       }
       steps.round++;
     }
@@ -93,10 +103,10 @@ $(function() {
   $container.html(grid);
   updateStepsUI();
 
-  $('.' + gridClass).hammer().bind('tap', function(e) {
+  $container.on('click', '.' + gridClass, function(e) {
     var returnImmediate = false;
 
-    if (steps.currStep === 0) return;
+    if (!isInteractive || steps.currStep === 0) return;
     
     if (currRole === 'lead') {
       currMove.push($(e.target).data('grid-id'));
@@ -109,6 +119,11 @@ $(function() {
         });
         updateScore(false);
         returnImmediate = true;
+      } else {
+        // Got full pattern right, score +1 to contender
+        if (steps.currStep === 1) {
+          updateScore(true);
+        }
       }
     }
 
@@ -130,10 +145,6 @@ $(function() {
     steps.currStep --;
 
     if (steps.currStep === 0) {
-      if (currRole === 'follow') {
-        updateScore(true);
-      }
-
       makeMove();
     }
 
@@ -158,6 +169,7 @@ $(function() {
     });
 
     runDelayedFn((currMove.length * 750) + 200, function() {
+      isInteractive = true;
       steps.currStep = currMove.length;
       updateUI();
     });
@@ -179,9 +191,22 @@ $(function() {
   function updateUI() {
     fbRef.child('players').once('value', function(s) {
       if (Object.keys(s.val()).length === 2) {
+        // When two people join, show the game board and start the timer
         $('.simon-says-lobby').hide();
         $('.simon-says-game').show();
+        
+        if (!gameTimer) {
+          gameTimer = setInterval(updateGameTimer, 1000);
+        }
       }
+
+      $.each(s.val(), function(i, val) {
+        if (i === playerId) {
+          $('.simon-says-score-mine').text(val.score);
+        } else {
+          $('.simon-says-score-opp').text(val.score);
+        }
+      });
     });
 
     if (currRole === 'wait') {
@@ -209,6 +234,26 @@ $(function() {
         }
       });
     });
+  }
+
+  function updateGameTimer() {
+    steps.timeLimit--;
+    $('.simon-says-game-timer-value').text(steps.timeLimit);
+
+    if (steps.timeLimit === 30) {
+      $('.simon-says-game-timer-value').addClass('caution');
+    } else if (steps.timeLimit === 15) {
+      $('.simon-says-game-timer-value').removeClass('caution').addClass('warning');
+    }
+
+    if (steps.timeLimit === 0) {
+      clearInterval(gameTimer);
+      finishGame();
+    }
+  }
+
+  function finishGame() {
+    console.log('GAME FINISHED');
   }
 
   function runDelayedFn(delay, fn) {
