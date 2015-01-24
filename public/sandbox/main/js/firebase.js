@@ -14,7 +14,6 @@
         roomId: "testRoom1",
         playerId: "testPlayer1",
         avatar: 1,
-        // states: ["idle", "active"],
         state: "idle",
 
         currentRoom: {},
@@ -34,11 +33,13 @@
                 game.displayError("THE ROOM ALREADY EXISTS");
             } else {
                 // create the room
-
-                var roomsRef = new Firebase(this.roomUrl);
+                
+                var roomsRef = new Firebase(fb.roomUrl);
                 roomsRef.child(roomId).set({
                     name: roomId,
-                    open: true
+                    open: true,
+                    order: [],
+                    currentPlayerTurn: 0
                 });
 
                 game.displayMessage("ROOM " + roomId + " WAS CREATED SUCCESSFULLY");
@@ -48,12 +49,18 @@
         joinBoardRoomExistsCallback: function(roomId, exists) {
             if (exists) {
                 // check if i can join the room
-                
-                fb.playerRef = new Firebase(fb.playerUrl + "/" + roomId);
+                fb.playersRef = new Firebase(fb.playerUrl + "/" + roomId);
 
-                fb.playerRef.on('value', function(snapshot) {
-                    currentRoomPlayers = snapshot.val();
+                fb.playersRef.once('value', function(snapshot) {
+                    game.activePlayers = snapshot.val();
+                    game.showPlayersInRoom();
                 });
+
+                fb.playersRef.on("child_added", fb.onPlayerAdded);
+                fb.playersRef.on("child_changed", fb.onPlayerChanged);
+
+                var roomsRef = new Firebase(fb.roomUrl + "/" + roomId);
+                roomsRef.on("child_changed", fb.onActiveRoomChanged);
 
                 game.displayMessage("ROOM " + roomId + " WAS JOINED SUCCESSFULLY");
             } else {
@@ -66,6 +73,7 @@
             if (exists) {
                 // check if i can join the room
                 var player = $("#playerId").val();
+
                 fb.checkIfPlayerExistsInRoom(roomId, player);
             } else {
                 game.displayError("THE ROOM DOESN'T EXIST");
@@ -81,11 +89,6 @@
             });
         },
 
-        registerPlayer: function(roomId) {
-            playerId = prompt('player id?', 'testPlayer1');
-            checkIfPlayerExistsInRoom(roomId, playerId);
-        },
-
         // room exist callback
         playerExistsCallback: function(roomId, playerId, exists) {
             
@@ -94,28 +97,67 @@
                 game.displayError("SORRY " + playerId + " ALREADY EXISTS IN ROOM " + roomId);
             } else {
 
-                this.playerRef = new Firebase(this.playerUrl + "/" + roomId);
+                this.playersRef = new Firebase(this.playerUrl + "/" + roomId);
 
                 // setup the game level variables
-                this.playerRef.on('value', function(snapshot) {
+                this.playersRef.on('value', function(snapshot) {
                     game.activePlayers = snapshot.val();
                 });
 
-                game.playerId = playerId;
-                game.roomId = roomId;
+                var numPlayers = Object.keys(game.activePlayers).length;
 
-                if (Object.keys(game.activePlayers).length < this.MAX_IN_ROOM) {
+                if (numPlayers < this.MAX_IN_ROOM) {
                     // create the player
+
+                    game.playerId = playerId;
+                    game.roomId = roomId;
+
+                    
+
+                    // get the avatar
+                    var avatar = $("#avatar").val();
 
                     // this.playersRef = new Firebase(this.playerUrl + "/" + roomId);
                     this.playersRef.child(playerId).set({
                         name: playerId,
                         active: true,
-                        avatar: 1,
+                        avatar: avatar,
                         position: 0
-                    });
+                    }); 
+
+                    // listen for changed to the players
+                    this.playersRef.on("child_added", this.onPlayerAdded);
+                    this.playersRef.on("child_changed", this.onPlayerChanged);
 
                     board.init();
+
+                    var roomsRef = new Firebase(fb.roomUrl + "/" + roomId);
+                    roomsRef.once('value', function(snapshot) {
+                        var val = snapshot.val();
+
+                        var newOrder = val.order || [];
+                        newOrder.push (playerId);
+                        
+                        if (numPlayers == 3) {
+                            roomsRef.set({
+                                name: roomId,
+                                open: closed,
+                                order: newOrder,
+                                currentPlayerTurn: 0
+                            });
+                        } else {
+                            roomsRef.set({
+                                name: roomId,
+                                open: true,
+                                order: newOrder,
+                                currentPlayerTurn: 0
+                            });
+                        }
+
+
+                    });
+                    
+                    roomsRef.on("child_changed", this.onActiveRoomChanged);
 
                     game.displayMessage("ROOM " + roomId + " JOINED SUCCESSFULLY AS " + playerId);
                 } else {
@@ -156,16 +198,24 @@
 
         joinRoom: function(playerId) {
 
-        }
-        
-        // work with controls on page
+        },
 
+        onActiveRoomChanged: function(snapshot) {
+            var data = snapshot.val();
+            console.log("ACTIVE ROOM CHANGED", data);
+        },
 
-        // registerRoom();
-        // registerRoom();
-        // registerPlayer("testRoom1");
-        // postRoll("testPlayer1", 4);
-        // movePlayer("testRoom1", "testPlayer1", -6);
+        onPlayerAdded: function (snapshot) {
+            var data = snapshot.val();
+            console.log("NEW PLAYER ADDED", data);  
+        },
+
+        onPlayerChanged: function(snapshot) {
+            var data = snapshot.val();
+            console.log("PLAYER INFO CHANGED", data);  
+            game.playerChanged(data);
+        },
+
 
     };
 

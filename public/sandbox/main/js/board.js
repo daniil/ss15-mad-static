@@ -7,6 +7,7 @@
         board_height: 9,
         board_tiles: 0,
         targetIndex: 1,
+        activePlayer: null,
 
         moveToEndOfArm: function() {
 
@@ -17,15 +18,6 @@
             console.log(this, "INITIALIZING BOARD");
 
             this.board_tiles = this.board_width * this.board_height
-            
-            $('#bird').sprite({
-                fps: 12,
-                no_of_frames: 3
-            });
-
-            $('#bird').on("click", function(event) {
-                $('#bird').spToggle();
-            });
 
             for (var i = 0; i < this.board_tiles; i++) {
 
@@ -33,7 +25,6 @@
 
                     board.targetIndex = Number($(this).attr("id").replace('tile-', ''));
                     board.moveBird();
-                    // console.log(board);
                     
                 });
             }
@@ -41,6 +32,29 @@
             this.getTileArm(this.player_index);
             this.setBirdToTile(this.player_index);
 
+        },
+
+        addPlayer: function(playerId, avatar) {
+
+            var playerDiv = $("<div id='" + playerId + "' class='" + avatar + "'>");
+            
+            $("#players").append(playerDiv);
+
+            $('#' + playerId).sprite({
+                fps: 12,
+                no_of_frames: 3
+            });
+
+            $('#' + playerId).on("click", function(event) {
+                $(this).spToggle();
+            });
+        },
+
+        movePlayer: function(playerId, targetIndex) {
+
+            this.activePlayer = playerId;
+
+            this.moveBird();
         },
 
         goToEnd: function() {
@@ -72,7 +86,7 @@
             this.player_index = tile;
             tile += 1;
             //$("#bird").offset($("#tile-"+pad(tile, 2)).offset());
-            TweenMax.to($("#bird"), 1, {
+            TweenMax.to($("#" + this.activePlayer), 1, {
                 left: $("#tile-" + this.pad(tile, 2)).offset().left,
                 top: $("#tile-" + this.pad(tile, 2)).offset().top,
                 ease: Linear.easeOut,
