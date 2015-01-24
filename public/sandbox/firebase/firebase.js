@@ -108,8 +108,7 @@ $(function() {
     // registerRoom();
     // registerRoom();
     // registerPlayer("testRoom1");
-    postRoll("testPlayer1", 4);
+    // postRoll("testPlayer1", 4);
     // movePlayer("testRoom1", "testPlayer1", -6);
-    // movePlayer("testRoom1", "testPlayer1", 4);
 
 });
