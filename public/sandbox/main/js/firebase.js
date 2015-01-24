@@ -34,8 +34,8 @@
                 game.displayError("THE ROOM ALREADY EXISTS");
             } else {
                 // create the room
-
-                var roomsRef = new Firebase(this.roomUrl);
+                
+                var roomsRef = new Firebase(fb.roomUrl);
                 roomsRef.child(roomId).set({
                     name: roomId,
                     open: true
@@ -100,7 +100,7 @@
                 this.playerRef.on('value', function(snapshot) {
                     game.activePlayers = snapshot.val();
                 });
-
+                
                 game.playerId = playerId;
                 game.roomId = roomId;
 

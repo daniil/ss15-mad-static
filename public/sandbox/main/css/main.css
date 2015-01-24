@@ -144,6 +144,44 @@ body {
     display:block;  
     position:absolute;
 }
+
+.avatar0 {
+    background:url(../img/bird_0.png);
+    width:73px;
+    height:50px;
+    overflow:hidden;
+    display:block;  
+    position:absolute;
+}
+
+.avatar1{
+    background:url(../img/bird_1.png);
+    width:73px;
+    height:50px;
+    overflow:hidden;
+    display:block;  
+    position:absolute;
+}
+
+.avatar2{
+    background:url(../img/bird_2.png);
+    width:73px;
+    height:50px;
+    overflow:hidden;
+    display:block;  
+    position:absolute;
+}
+
+.avatar3{
+    background:url(../img/bird_3.png);
+    width:73px;
+    height:50px;
+    overflow:hidden;
+    display:block;  
+    position:absolute;
+}
+
+
 .error { color: red; }
 
 
