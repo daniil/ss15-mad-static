@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Dialog</title>
+    <style>
+        .dialog {
+            background-color: #eee;
+            border:1px solid #333;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .dialog p, .dialog .actions {
+            color:#111;
+        }
+
+        .dialog .actions button {
+            padding:1rem 5rem;
+            background-color: chartreuse;
+            border:none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+
+<div id="dialog-holder"></div>
+
+<script src="../bower_components/jquery/dist/jquery.js"></script>
+<script src="dialog.js"></script>
+<script>
+    var d = new Dialog("start","Start");
+    d.show();
+</script>
+</body>
+</html>
