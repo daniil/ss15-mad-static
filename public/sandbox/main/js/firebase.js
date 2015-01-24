@@ -38,7 +38,9 @@
                 var roomsRef = new Firebase(fb.roomUrl);
                 roomsRef.child(roomId).set({
                     name: roomId,
-                    open: true
+                    open: true,
+                    order: [],
+                    currentPlayerTurn: 0
                 });
 
                 game.displayMessage("ROOM " + roomId + " WAS CREATED SUCCESSFULLY");
@@ -48,11 +50,11 @@
         joinBoardRoomExistsCallback: function(roomId, exists) {
             if (exists) {
                 // check if i can join the room
-                
                 fb.playerRef = new Firebase(fb.playerUrl + "/" + roomId);
 
                 fb.playerRef.on('value', function(snapshot) {
-                    currentRoomPlayers = snapshot.val();
+                    game.activePlayers = snapshot.val();
+                    game.showPlayersInRoom();
                 });
 
                 game.displayMessage("ROOM " + roomId + " WAS JOINED SUCCESSFULLY");
@@ -61,11 +63,11 @@
             }
         },
 
-
         joinRoomExistsCallback: function(roomId, exists) {
             if (exists) {
                 // check if i can join the room
                 var player = $("#playerId").val();
+
                 fb.checkIfPlayerExistsInRoom(roomId, player);
             } else {
                 game.displayError("THE ROOM DOESN'T EXIST");
@@ -79,11 +81,6 @@
                 var exists = (snapshot.val() !== null);
                 callback(roomId, exists);
             });
-        },
-
-        registerPlayer: function(roomId) {
-            playerId = prompt('player id?', 'testPlayer1');
-            checkIfPlayerExistsInRoom(roomId, playerId);
         },
 
         // room exist callback
@@ -100,23 +97,54 @@
                 this.playerRef.on('value', function(snapshot) {
                     game.activePlayers = snapshot.val();
                 });
-                
+
                 game.playerId = playerId;
                 game.roomId = roomId;
 
-                if (Object.keys(game.activePlayers).length < this.MAX_IN_ROOM) {
+                var numPlayers = Object.keys(game.activePlayers).length;
+
+                if (numPlayers < this.MAX_IN_ROOM) {
                     // create the player
+                    
+                    // get the avatar
+                    var avatar = $("#avatar").val();
 
                     // this.playersRef = new Firebase(this.playerUrl + "/" + roomId);
                     this.playersRef.child(playerId).set({
                         name: playerId,
                         active: true,
-                        avatar: 1,
+                        avatar: avatar,
                         position: 0
-                    });
+                    }); 
 
                     board.init();
 
+                    var roomsRef = new Firebase(fb.roomUrl + "/" + roomId);
+                    roomsRef.once('value', function(snapshot) {
+                        var val = snapshot.val();
+
+                        var newOrder = val.order || [];
+                        newOrder.push (playerId);
+                        
+                        if (numPlayers == 3) {
+                            roomsRef.set({
+                                name: roomId,
+                                open: closed,
+                                order: newOrder,
+                                currentPlayerTurn: 0
+                            });
+                        } else {
+                            roomsRef.set({
+                                name: roomId,
+                                open: true,
+                                order: newOrder,
+                                currentPlayerTurn: 0
+                            });
+                        }
+
+
+                    });
+                    
                     game.displayMessage("ROOM " + roomId + " JOINED SUCCESSFULLY AS " + playerId);
                 } else {
                     game.displayError("THERE ARE TOO MANY PEOPLE IN " + roomId)

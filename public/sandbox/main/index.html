@@ -33,8 +33,15 @@
             </fieldset>
             <fieldset>
                 <p>
-                    <label for="roomId">Player ID: </label>
+                    <label for="playerId">Player ID: </label>
                     <input type="text" name="playerId" id="playerId" />
+                    <label for="avatarId">Avatar ID: </label>
+                    <select name="avatar" id="avatar">
+                        <option value="0" selected>0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </select>
                     <input type="button" name="room-join" id="room-join" value="join">
                 </p>
                 <p>
@@ -54,7 +61,7 @@
             <p id="current-room"></p>
         </div>
 
-        <div id="players">
+        <div id="activePlayers">
 
         </div>
     </div>

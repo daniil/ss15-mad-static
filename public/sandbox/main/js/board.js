@@ -8,7 +8,7 @@
         board_tiles: 0,
         targetIndex: 1,
         activePlayer: null,
-
+        
         moveToEndOfArm: function() {
 
         },
@@ -40,7 +40,6 @@
             
             $("#players").append(playerDiv);
 
-// return;
             $('#' + playerId).sprite({
                 fps: 12,
                 no_of_frames: 3
