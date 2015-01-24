@@ -181,6 +181,13 @@ body {
     position:absolute;
 }
 
+#activePlayers li div {
+    position: relative; 
+    left: 80px;
+    top:-30px;
+}
+
+.active { font-weight: bold; color:green;}
 
 .error { color: red; }
 

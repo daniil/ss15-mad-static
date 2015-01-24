@@ -19,18 +19,15 @@
 
             this.board_tiles = this.board_width * this.board_height
 
-            for (var i = 0; i < this.board_tiles; i++) {
+            // for (var i = 0; i < this.board_tiles; i++) {
 
-                $('#tile-' + this.pad(i + 1, 2)).on("click", function(event) {
+            //     $('#tile-' + this.pad(i + 1, 2)).on("click", function(event) {
 
-                    board.targetIndex = Number($(this).attr("id").replace('tile-', ''));
-                    board.moveBird();
+            //         board.targetIndex = Number($(this).attr("id").replace('tile-', ''));
+            //         board.moveBird();
                     
-                });
-            }
-
-            // this.getTileArm(this.player_index);
-            // this.setBirdToTile(this.player_index);
+            //     });
+            // }
 
         },
 

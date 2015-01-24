@@ -61,7 +61,11 @@
 
                 var roomsRef = new Firebase(fb.roomUrl + "/" + roomId);
                 roomsRef.on("child_changed", fb.onActiveRoomChanged);
-
+                roomsRef.once("value", function(snapshot) {
+                    var val = snapshot.val();
+                    game.updateOrder(val);
+                })
+                
                 game.displayMessage("ROOM " + roomId + " WAS JOINED SUCCESSFULLY");
             } else {
                 game.displayError("THE ROOM DOESN'T EXIST");
@@ -112,6 +116,7 @@
                     game.playerId = playerId;
                     game.roomId = roomId;
 
+
                     // get the avatar
                     var avatar = $("#avatar").val();
 
@@ -130,12 +135,15 @@
                     board.init();
 
                     var roomsRef = new Firebase(fb.roomUrl + "/" + roomId);
+
                     roomsRef.once('value', function(snapshot) {
                         var val = snapshot.val();
 
                         var newOrder = val.order || [];
                         newOrder.push (playerId);
                         
+                        game.updateOrder(val);
+
                         if (numPlayers == 3) {
                             roomsRef.set({
                                 name: roomId,
