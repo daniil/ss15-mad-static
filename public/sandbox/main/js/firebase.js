@@ -123,8 +123,6 @@
                         position: 0
                     }); 
 
-
-
                     // listen for changed to the players
                     this.playersRef.on("child_added", this.onPlayerAdded);
                     this.playersRef.on("child_changed", this.onPlayerChanged);

@@ -34,9 +34,9 @@
 
         },
 
-        addPlayer: function(playerId, avatar) {
+        addPlayer: function(playerId, avatar, position) {
 
-            var playerDiv = $("<div data-index='0' id='" + playerId + "' class='" + avatar + "'>");
+            var playerDiv = $("<div data-index='" + position + "' id='" + playerId + "' class='" + avatar + "'>");
             
             $("#players").append(playerDiv);
 
@@ -49,8 +49,13 @@
                 $(this).spToggle();
             });
 
-            this.getTileArm(0);
-            this.setBirdToTile(0);
+            this.getTileArm(position);
+            this.setBirdToTile(position);
+            
+            var paddedTile = this.pad(position+ 1, 2) ;
+
+            $('#' + playerId).css("left", $("#tile-" + paddedTile).offset().left);
+            $('#' + playerId).css("top", $("#tile-" + paddedTile).offset().top);
 
         },
 
@@ -94,8 +99,9 @@
 
             this.player_index = tile;
             $("#" + this.activePlayer).data("index", tile);
+            // console.log($("#" + this.activePlayer).data("index"));
             tile += 1;
-            //$("#bird").offset($("#tile-"+pad(tile, 2)).offset());
+            
             TweenMax.to($("#" + this.activePlayer), 1, {
                 left: $("#tile-" + this.pad(tile, 2)).offset().left,
                 top: $("#tile-" + this.pad(tile, 2)).offset().top,
