@@ -8,7 +8,7 @@
         board_tiles: 0,
         targetIndex: 1,
         activePlayer: null,
-        
+
         moveToEndOfArm: function() {
 
         },
@@ -50,7 +50,7 @@
             });
         },
 
-        movePlayer: function(playerId) {
+        movePlayer: function(playerId, targetIndex) {
 
             this.activePlayer = playerId;
 
