@@ -22,7 +22,7 @@
       roundStep: 1,
       currStep: 3,
       round: 0,
-      timeLimit: 60
+      timeLimit: 10
     },
 
     isInteractive: true,
@@ -50,6 +50,8 @@
           challenges.processChange(s);
 
           challenges.challengeStarted = true;
+
+          challenges.updateUI();
 
         } else {
 
