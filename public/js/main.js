@@ -86,7 +86,7 @@
             $("#waiting .cta").on("click", function(e) {
 
                 if (Object.keys(game.activePlayers).length < 2) {
-                    return alert("get some friends");
+                    // return alert("get some friends");
                 }
 
                 game.hideDialog("waiting");
