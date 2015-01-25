@@ -97,7 +97,7 @@
 
     		var player = data.order[data.currentPlayerTurn];
     		if (player == game.playerId) {
-    			alert('it is your turn ' + game.playerId);
+    			this.displayMessage('it is your turn ' + game.playerId);
                 dice.enableRoll();
     		} else {
                 dice.disableRoll();
@@ -115,7 +115,7 @@
         },
 
         rollComplete: function() {
-            fb.nextTurn(playerId);
+            fb.nextTurn(this.playerId);
         },
 
     	initGame: function() {

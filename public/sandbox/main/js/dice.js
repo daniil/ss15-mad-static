@@ -34,7 +34,7 @@
         //shake event callback
         shakeEventDidOccur: function() {
             var number = Math.ceil(dice.randomDieNumber(dice.maxX + dice.maxY) * 6);
-            alert("you rolled a " + number);
+            game.displayMessage("you rolled a " + number);
             game.rollDice(number);
         },
 

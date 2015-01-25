@@ -217,7 +217,7 @@
         },
 
         nextTurn: function () {
-            this.roomsRef = new Firebase(fb.roomUrl + "/" + roomId);
+            this.roomsRef = new Firebase(this.roomUrl + "/" + game.roomId);
 
             this.roomsRef.once('value', function(snapshot) {
                 var val = snapshot.val();
@@ -226,7 +226,7 @@
                 turn %= val.order.length;
 
                 fb.roomsRef.set({
-                    name: roomId,
+                    name: val.name,
                     open: false,
                     order: val.order,
                     currentPlayerTurn: turn
