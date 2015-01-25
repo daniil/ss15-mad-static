@@ -231,6 +231,7 @@
             var spacesMoved = Math.round(gameResults.points * ratio);
 
             console.log("THIS IS THE END, MY SO CALLED FRIEND, THE END", spacesMoved);
+            fb.postRoll(this.playerId, spacesMoved);
         },
 
         displayDialog: function(dialog) {
