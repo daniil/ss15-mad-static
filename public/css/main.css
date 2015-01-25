@@ -78,16 +78,18 @@ body {
 
 .tile {
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 4px;
+    left: 4px;
     width: 11.111%;
     height: 11.111%;
     /*background-color: #ddd;*/
 }
 
-.tile:nth-child(odd) {
-    /*background-color: #aaa;*/
+
+.tile:nth-child(odd) span:nth-child(1) {
+    color: #b97114;
 }
+
 
 .X1 {
     left: 0;
@@ -673,5 +675,74 @@ body {
         padding:1em;
 
     }
+
+}
+
+
+
+body.mobile {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    margin: 0;
+}
+
+.mobile #game-board {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    position:relative;
+}
+.mobile #main-menu {
+    width: 80%;
+    height: 80%;
+    /*min-width: 20em;*/
+    /*margin: 0 auto;*/
+    position: absolute;
+    /*background: #aaeeaa;*/
+    padding: 10%;
+}
+
+.mobile #board-container {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: scroll;
+}
+
+.mobile #board {
+    position: absolute;
+    -webkit-transition: all 1s; /* For Safari 3.1 to 6.0 */
+    transition: all 1s;
+    width:900px !important;
+    height:900px !important;
+    max-width:900px !important;
+    max-height:900px !important;
+}
+
+.mobile #players {
+    width:900px;
+    height: 900px;
+    pointer-events:none;
+    position:absolute;
+    /*background-color: rgba(120,20,20,0.3);*/
+
+}
+
+.mobile #players-container {
+    width:100%;
+    height:100%;
+    position: absolute;
+    overflow: scroll;
+    pointer-events:none;
+}
+
+.mobile #dialogs .dialog {
+    box-sizing: border-box;
+    left:0;
+    width:100%;
+    padding:1em;
 
 }
