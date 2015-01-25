@@ -28,7 +28,7 @@
                 // register a shake event
                 window.addEventListener('shake', dice.shakeEventDidOccur, false);
             }
-            console.log("ENABLE ROLL");
+            // console.log("ENABLE ROLL");
 
             $("#roll").on("click", dice.manualShake);
         },
@@ -42,8 +42,6 @@
 
         //shake event callback
         shakeEventDidOccur: function() {
-
-            console.log("fuck this shake shit");
 
             var number = Math.ceil(dice.randomDieNumber(dice.maxX + dice.maxY) * 6);
             game.displayMessage("you rolled a " + number);
