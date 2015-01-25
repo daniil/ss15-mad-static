@@ -147,13 +147,13 @@
             var tile_tally = 81;
 
             for (var j = this.tileArmLength.length -1; j >= 0; j--) {
-                console.log(tile_tally, pindex);
+                
                 if (tile_tally < pindex) {
 
                     var tile_end = tile_tally;
                     
                     if (pindex == tile_end) {
-                        tile_end -= this.tileArmLength[j];
+                        tile_end -= this.tileArmLength[j-1];
                     }
 
                     this.setPlayerToTile(tile_end);
@@ -245,12 +245,29 @@
                 // console.log("Go to end");
                 console.log(board.targetIndex, pindex);
                 if (board.targetIndex < pindex){
-                    board.goToEndBackwards();
+                    board.setPlayerToTile(board.targetIndex );
                 } else {
                     board.goToEnd();
                 }
                 
             }
+        },
+
+        getTileArmBackwards: function(tileIndex) {
+
+            var tile_tally = 81;
+            for (var i = this.tileArmLength.length; i >=0; i--) {
+                if (tile_tally > tileIndex) {
+                    return (i - 1);
+                    break;
+                }
+
+                tile_tally -= this.tileArmLength[i];
+            }
+            // for (var i in this.tileArmLength) {
+                
+
+            // }
         },
 
         getTileArm: function(tileIndex) {
