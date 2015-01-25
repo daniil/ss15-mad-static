@@ -282,7 +282,10 @@
                         game.startGame();
                         game.hideDialog("waiting");
                     }
-                } else if (game.isGameStarted) {
+                } 
+                
+                if (game.gameIsRunning) {
+                    
                    game.updateTurn(data); 
                 }
                 
