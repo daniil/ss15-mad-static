@@ -15,7 +15,7 @@
                 window.ondevicemotion = function(e) {
                     dice.maxX = Math.max(Math.abs(event.acceleration.x), dice.maxX);
                     dice.maxY = Math.max(Math.abs(event.acceleration.y), dice.maxY);
-                }
+                };
 
                  //create a new instance of shake.js.
                 var myShakeEvent = new Shake({
@@ -70,7 +70,7 @@
             var x = Math.sin(seed++) * 10000;
             return x - Math.floor(x);
         }
-    }
+    };
 
     window.dice = dice;
 

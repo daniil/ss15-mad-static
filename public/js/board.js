@@ -203,18 +203,24 @@
             $("#" + this.activePlayer).data("index", tile);
             // console.log($("#" + this.activePlayer).data("index"));
             tile += 1;
-            
-            TweenMax.to($("#" + this.activePlayer), 1, {
-                left: $("#tile-" + this.pad(tile, 2)).offset().left,
-                top: $("#tile-" + this.pad(tile, 2)).offset().top,
-                ease: Linear.easeOut,
-                onComplete: this.moveBird
-            });
 
-			if(window.mobilecheck()){
-				$("#board-container" ).scrollLeft($("#tile-" + this.pad(tile, 2)).offset().left);
-				$("#board-container" ).scrollTop($("#tile-" + this.pad(tile, 2)).offset().top);
+			if(mobilecheck()){
+				TweenMax.to($("#" + this.activePlayer), 1, {
+					left: $("#tile-" + this.pad(tile, 2)).css("left"),
+					top: $("#tile-" + this.pad(tile, 2)).css("top"),
+					ease: Linear.easeOut,
+					onComplete: this.moveBird
+				});
+			} else {
+				TweenMax.to($("#" + this.activePlayer), 1, {
+					left: $("#tile-" + this.pad(tile, 2)).offset().left,
+					top: $("#tile-" + this.pad(tile, 2)).offset().top,
+					ease: Linear.easeOut,
+					onComplete: this.moveBird
+				});
 			}
+
+
 
         },
 
@@ -240,6 +246,7 @@
             if (board.getTileArm(pindex) == board.getTileArm(board.targetIndex)) {
                 // console.log("Go Directly");
                 board.setBirdToTile(board.targetIndex - 1);
+
             } else {
                 // console.log("Go to end");
                 board.goToEnd();

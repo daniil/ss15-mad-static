@@ -171,8 +171,19 @@
 
         turnComplete: function(playersTurn) {
 
+			if(mobilecheck()){
+				if ($("#" + this.playerId ).offset().left > 0) {
+					$("#board-container" ).scrollLeft($("#" + this.playerId ).offset().left - 40);
+				} else {
+					$("#board-container" ).scrollLeft($("#" + this.playerId ).offset().left);
+				}
+
+				$("#board-container" ).scrollTop($("#" + this.playerId ).offset().top);
+			}
             // console.log(playersTurn, this.playerId);
-            if (playersTurn == this.playerId) {
+
+			if (playersTurn == this.playerId) {
+
                 fb.nextTurn(this.playerId);
             }
         },
