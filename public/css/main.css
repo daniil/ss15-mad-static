@@ -226,10 +226,25 @@ body {
     
 }
 
-.snake-body { background-color: red !important; }
-.snake-head { background-color: purple !important; }
-.snake-tail { background-color: orange !important; }
+.snake-body.east, .snake-body.west { background: transparent url(../img/snake-body-h.png) center center; }
+.snake-body.north, .snake-body.south { background: transparent url(../img/snake-body-v.png) center center; }
 
+.snake-body.east.north { background: transparent url(../img/snake-turn-nw.png) center center; }
+.snake-body.west.north { background: transparent url(../img/snake-turn-sw.png) center center; }
+.snake-body.east.south { background: transparent url(../img/snake-turn-ne.png) center center; }
+.snake-body.west.south { background: transparent url(../img/snake-turn-se.png) center center; }
+
+.snake-head.north { background: transparent url(../img/snake-head-n.png) center center; }
+.snake-head.east { background: transparent url(../img/snake-head-e.png) center center; }
+.snake-head.west { background: transparent url(../img/snake-head-w.png) center center; }
+.snake-head.south { background: transparent url(../img/snake-head-s.png) center center; }
+
+.snake-tail.north { background: transparent url(../img/snake-tail-n.png) center center; }
+.snake-tail.east { background: transparent url(../img/snake-tail-e.png) center center; }
+.snake-tail.west { background: transparent url(../img/snake-tail-w.png) center center; }
+.snake-tail.south { background: transparent url(../img/snake-tail-s.png) center center; }
+
+/*.ladder-body.east, .ladder-body.west { background: transparent url(../img/ladder-body-h.png) center center; }*/
 .ladder-body { background-color: blue !important; }
 .ladder-head { background-color: green !important; }
 .ladder-tail { background-color: aqua !important; }

@@ -5,11 +5,12 @@
         maxY: 0,
         totalX: 0,
         totalY: 0,
+        enabled: false,
 
         enableRoll: function() {
-
+            if (this.enabled) return;
             // TODO: adjust the content of the window depending on the capabilities of the device
-
+            this.enabled = true;
             if (window.DeviceMotionEvent != undefined) {
                 window.ondevicemotion = function(e) {
                     dice.maxX = Math.max(Math.abs(event.acceleration.x), dice.maxX);
@@ -27,6 +28,7 @@
                 // register a shake event
                 window.addEventListener('shake', dice.shakeEventDidOccur, false);
             }
+            console.log("ENABLE ROLL");
 
             $("#roll").on("click", dice.manualShake);
         },
@@ -40,6 +42,9 @@
 
         //shake event callback
         shakeEventDidOccur: function() {
+
+            console.log("fuck this shake shit");
+
             var number = Math.ceil(dice.randomDieNumber(dice.maxX + dice.maxY) * 6);
             game.displayMessage("you rolled a " + number);
             game.rollDice(number);
@@ -48,9 +53,11 @@
         },
 
         disableRoll: function() {
+            this.enabled = false;
             game.hideDialog('roll-dice');
+
         	try {
-                $("#roll").off("click", dice.manualShake);
+                
         		window.removeEventListener('shake', dice.shakeEventDidOccur, false);
            		window.ondevicemotion = null;	
         	} catch (e) {
