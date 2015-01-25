@@ -209,7 +209,7 @@
         miniChallengeFinished: function(gameResults) {
             // this only does something if you are the one who is effected by the points
             if (board.activePlayer != game.playerId) return;
-            
+            // console.log(gameResults);
             var players = Object.getOwnPropertyNames(gameResults.players);
             var me = game.playerId;
             var you = players[1 - players.indexOf(game.playerId)];
@@ -222,7 +222,9 @@
                 ratio = gameResults.players[me].score / totalScore;
             }
 
-            console.log("THIS IS THE END, MY SO CALLED FRIEND, THE END", me, you, totalScore, ratio);
+            var spacesMoved = Math.round(gameResults.points * ratio);
+
+            console.log("THIS IS THE END, MY SO CALLED FRIEND, THE END", spacesMoved);
         },
 
         displayDialog: function(dialog) {
