@@ -66,6 +66,8 @@ body {
     max-height: 100vw;
     margin: auto;
     position: relative;
+    background-image: url(../img/board.png);
+    background-size: contain;
 }
 
 .tile {
@@ -74,11 +76,11 @@ body {
     left: 0;
     width: 11.111%;
     height: 11.111%;
-    background-color: #ddd;
+    /*background-color: #ddd;*/
 }
 
 .tile:nth-child(odd) {
-    background-color: #aaa;
+    /*background-color: #aaa;*/
 }
 
 .X1 {
