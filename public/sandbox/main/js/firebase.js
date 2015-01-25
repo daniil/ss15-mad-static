@@ -10,6 +10,7 @@
         moveUrl: 'https://snl-room.firebaseio.com/game/moves',
 
         playersRef: null, //new Firebase(this.playerUrl),
+        roomsRef: null,
 
         roomId: "testRoom1",
         playerId: "testPlayer1",
@@ -33,7 +34,7 @@
                 game.displayError("THE ROOM ALREADY EXISTS");
             } else {
                 // create the room
-                
+
                 var roomsRef = new Firebase(fb.roomUrl);
                 roomsRef.child(roomId).set({
                     name: roomId,
@@ -60,13 +61,14 @@
                 fb.playersRef.on("child_changed", fb.onPlayerChanged);
 
                 var roomsRef = new Firebase(fb.roomUrl + "/" + roomId);
-                
+
                 roomsRef.on("child_changed", fb.onActiveRoomChanged);
                 roomsRef.once("value", function(snapshot) {
                     var val = snapshot.val();
+                    console.log(val);
                     game.updateOrder(val);
                 })
-                
+
                 game.displayMessage("ROOM " + roomId + " WAS JOINED SUCCESSFULLY");
 
             } else {
@@ -97,7 +99,7 @@
 
         // room exist callback
         playerExistsCallback: function(roomId, playerId, exists) {
-            
+
             if (exists) {
                 // check if i can join the room
                 game.displayError("SORRY " + playerId + " ALREADY EXISTS IN ROOM " + roomId);
@@ -128,31 +130,32 @@
                         active: true,
                         avatar: avatar,
                         position: 0
-                    }); 
+                    });
 
                     // listen for changed to the players
                     this.playersRef.on("child_added", this.onPlayerAdded);
                     this.playersRef.on("child_changed", this.onPlayerChanged);
 
-                    board.init();
+                    // board.init();
 
-                    var roomsRef = new Firebase(fb.roomUrl + "/" + roomId);
+                    this.roomsRef = new Firebase(fb.roomUrl + "/" + roomId);
 
-                    roomsRef.once('value', function(snapshot) {
+                    this.roomsRef.once('value', function(snapshot) {
                         var val = snapshot.val();
 
                         var newOrder = val.order || [];
-                        newOrder.push (playerId);
-                        
+                        newOrder.push(playerId);
+                        console.log(newOrder, fb.roomsRef);
+
                         if (numPlayers == 3) {
-                            roomsRef.set({
+                            fb.roomsRef.set({
                                 name: roomId,
-                                open: closed,
+                                open: false,
                                 order: newOrder,
                                 currentPlayerTurn: 0
                             });
                         } else {
-                            roomsRef.set({
+                            fb.roomsRef.set({
                                 name: roomId,
                                 open: true,
                                 order: newOrder,
@@ -160,13 +163,18 @@
                             });
                         }
 
-                        
-                        game.updateOrder(val);
+                        var rr = new Firebase(fb.roomUrl + "/" + roomId);
 
+                        rr.once('value', function(snapshot) {
+                            var val = snapshot.val();
+                            console.log(val)
+                            game.updateOrder(val);
+                        });
 
+                        // board.init();
                     });
-                    
-                    roomsRef.on("child_changed", this.onActiveRoomChanged);
+
+                    fb.roomsRef.on("child_changed", this.onActiveRoomChanged);
 
                     fb.playersRef.once('value', function(snapshot) {
                         game.activePlayers = snapshot.val();
@@ -184,7 +192,7 @@
         // check to see if a room exists
         checkIfPlayerExistsInRoom: function(roomId, playerId) {
             this.playersRef = new Firebase(this.playerUrl + "/" + roomId);
-            
+
             this.playersRef.child(playerId).once('value', function(snapshot) {
                 var exists = (snapshot.val() !== null);
                 fb.playerExistsCallback(roomId, playerId, exists);
@@ -216,19 +224,30 @@
 
         onActiveRoomChanged: function(snapshot) {
             var data = snapshot.val();
-
-            game.updateTurn(data);
             console.log("ACTIVE ROOM CHANGED", data);
+            // 
+
+            fb.playersRef.once('value', function(snapshot) {
+                game.activePlayers = snapshot.val();
+                game.showPlayersInRoom();
+            });
+            fb.roomsRef.once("value", function(snapshot) {
+                var data = snapshot.val();
+                game.updateTurn(data);
+            });
+
+
         },
 
-        onPlayerAdded: function (snapshot) {
+        onPlayerAdded: function(snapshot) {
             var data = snapshot.val();
-            console.log("NEW PLAYER ADDED", data);  
+            console.log("NEW PLAYER ADDED", data);
+            game.playerChanged(data);
         },
 
         onPlayerChanged: function(snapshot) {
             var data = snapshot.val();
-            console.log("PLAYER INFO CHANGED", data);  
+            console.log("PLAYER INFO CHANGED", data);
             game.playerChanged(data);
         },
 
