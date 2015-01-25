@@ -9,6 +9,27 @@
         targetIndex: 1,
         activePlayer: null,
 
+        ladders: [ 
+            { start: 6, length: 10 }, 
+            { start: 14, length: 6 }, 
+            { start: 24, length: 15 }, 
+            { start: 32, length: 4 }, 
+            { start: 40, length: 10 }, 
+            { start: 46, length: 3 }, 
+            { start: 60, length: 10 }, 
+            { start: 68, length: 7 }],
+
+        snakes: [ 
+            { start: 10, length: 8 }, 
+            { start: 18, length: 5 }, 
+            { start: 25, length: 15 }, 
+            { start: 38, length: 4 }, 
+            { start: 48, length: 10 }, 
+            { start: 56, length: 6 }, 
+            { start: 69, length: 10 }, 
+            { start: 80, length: 7 }],
+
+
         moveToEndOfArm: function() {
 
         },
@@ -19,16 +40,23 @@
 
             this.board_tiles = this.board_width * this.board_height
 
-            // for (var i = 0; i < this.board_tiles; i++) {
+            for (var i in this.snakes) {
+                // add a reference to the starting
+                var tile = $("#tile-" + this.pad(this.snakes[i].start, 2));
+                var snakeDiv = $("<div class='snake' data-value='" + this.snakes[i].length + "'>o shit.. a snake x" + this.snakes[i].length + "</div>");
+                // console.log(tile);
+                tile.append(snakeDiv);
+                tile.addClass('snake-tile');
+            }
 
-            //     $('#tile-' + this.pad(i + 1, 2)).on("click", function(event) {
-
-            //         board.targetIndex = Number($(this).attr("id").replace('tile-', ''));
-            //         board.moveBird();
-                    
-            //     });
-            // }
-
+            for (var i in this.ladders) {
+                // add a reference to the starting
+                // add a reference to the starting
+                var tile = $("#tile-" + this.pad(this.ladders[i].start, 2));
+                var ladderDiv = $("<div class='ladder' data-value='" + this.ladders[i].length + "'>thank jeebus! a ladder x" + this.ladders[i].length + "</div>");
+                tile.append(ladderDiv);
+                tile.addClass('ladder-tile');
+            }
         },
 
         addPlayer: function(playerId, avatar, position) {
@@ -111,14 +139,22 @@
             var pindex = $("#" + board.activePlayer).data("index");
 
             if (board.targetIndex - 1 == pindex) {
+                // console.log("complete", pindex, board.pad(pindex, 2));
+                // console.log($("#tile-" + board.pad(pindex + 1, 2)));
+                if ($("#tile-" + board.pad(pindex + 1, 2)).hasClass("ladder-tile"))  {
+                    alert("landed on a ladder");
+                } else if ($("#tile-" + board.pad(pindex + 1, 2)).hasClass("snake-tile"))  {
+                    alert("landed on a snake");
+                }
+                game.turnComplete(board.activePlayer);
                 return;
             }
             
             if (board.getTileArm(pindex) == board.getTileArm(board.targetIndex)) {
-                console.log("Go Directly");
+                // console.log("Go Directly");
                 board.setBirdToTile(board.targetIndex - 1);
             } else {
-                console.log("Go to end");
+                // console.log("Go to end");
                 board.goToEnd();
             }
         },
