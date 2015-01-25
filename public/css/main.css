@@ -223,6 +223,14 @@ body {
     
 }
 
+.snake-body { background-color: red !important; }
+.snake-head { background-color: purple !important; }
+.snake-tail { background-color: orange !important; }
+
+.ladder-body { background-color: blue !important; }
+.ladder-head { background-color: green !important; }
+.ladder-tail { background-color: aqua !important; }
+
 #hud { position: fixed; top: 0; left: 0; }
 
 .dialog { display: none; }
