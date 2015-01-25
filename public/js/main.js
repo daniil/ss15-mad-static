@@ -66,15 +66,29 @@
     	},
 
         initBoard: function() {
-            
+
             if (this.gameIsRunning) return;
 
             $("#main-menu").fadeOut();
             $("#game-board").fadeIn();
 
+			if(window.mobilecheck()){
+				$("#board-container" ).on("scroll",function(){
+					$this = $(this);
+					var $playersContainer = $("#players-container");
+					$playersContainer.scrollLeft($this.scrollLeft());
+					$playersContainer.scrollTop($this.scrollTop());
+				});
+			}
+
             this.displayDialog("waiting");
 
             $("#waiting .cta").on("click", function(e) {
+
+                if (Object.keys(game.activePlayers).length < 2) {
+                    return alert("get some friends");
+                }
+
                 game.hideDialog("waiting");
                 game.startGame();
             });
@@ -162,8 +176,19 @@
 
         turnComplete: function(playersTurn) {
 
+			if(mobilecheck()){
+				if ($("#" + this.playerId ).offset().left > 0) {
+					$("#board-container" ).scrollLeft($("#" + this.playerId ).offset().left - 40);
+				} else {
+					$("#board-container" ).scrollLeft($("#" + this.playerId ).offset().left);
+				}
+
+				$("#board-container" ).scrollTop($("#" + this.playerId ).offset().top);
+			}
             // console.log(playersTurn, this.playerId);
-            if (playersTurn == this.playerId) {
+
+			if (playersTurn == this.playerId) {
+
                 fb.nextTurn(this.playerId);
             }
         },

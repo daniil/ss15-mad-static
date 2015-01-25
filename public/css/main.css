@@ -138,7 +138,7 @@ body {
 .Y9 {
     top: 88.888%;
 }
-
+/*
 
 #bird{
     background:url(../img/bird_180x180.png);
@@ -147,43 +147,41 @@ body {
     overflow:hidden;
     display:block;  
     position:absolute;
-}
+}*/
 
 .avatar0 {
-    background:url(../img/bird_0.png);
-    width:73px;
-    height:50px;
-    overflow:hidden;
+    background:url(../img/gamepiece-blue.png);
+    width: 100px;
+    height: 100px;
     display:block;  
     position:absolute;
 }
 
 .avatar1{
-    background:url(../img/bird_1.png);
-    width:73px;
-    height:50px;
-    overflow:hidden;
+    background:url(../img/gamepiece-yellow.png);
+    width: 100px;
+    height: 100px;
     display:block;  
     position:absolute;
 }
 
 .avatar2{
-    background:url(../img/bird_2.png);
-    width:73px;
-    height:50px;
-    overflow:hidden;
+    background:url(../img/gamepiece-red.png);
+    width: 100px;
+    height: 100px;
     display:block;  
     position:absolute;
 }
 
 .avatar3{
-    background:url(../img/bird_3.png);
-    width:73px;
-    height:50px;
-    overflow:hidden;
+    background:url(../img/gamepiece-pink.png);
+    width: 100px;
+    height: 100px;
     display:block;  
     position:absolute;
 }
+
+.snake-tile { background: transparent url(../img/snake-tile.png) left top no-repeat; }
 
 #activePlayers li div {
     position: relative; 
@@ -239,15 +237,50 @@ body {
 .snake-head.west { background: transparent url(../img/snake-head-w.png) center center; }
 .snake-head.south { background: transparent url(../img/snake-head-s.png) center center; }
 
+.snake-head.north.west { background: transparent url(../img/snake-head-n.png) center center; }
+.snake-head.north.east { background: transparent url(../img/snake-head-e.png) center center; }
+.snake-head.south.west { background: transparent url(../img/snake-head-w.png) center center; }
+.snake-head.south.east { background: transparent url(../img/snake-head-s.png) center center; }
+
 .snake-tail.north { background: transparent url(../img/snake-tail-n.png) center center; }
 .snake-tail.east { background: transparent url(../img/snake-tail-e.png) center center; }
 .snake-tail.west { background: transparent url(../img/snake-tail-w.png) center center; }
 .snake-tail.south { background: transparent url(../img/snake-tail-s.png) center center; }
 
-/*.ladder-body.east, .ladder-body.west { background: transparent url(../img/ladder-body-h.png) center center; }*/
-.ladder-body { background-color: blue !important; }
-.ladder-head { background-color: green !important; }
-.ladder-tail { background-color: aqua !important; }
+.snake-tail.north.west { background: transparent url(../img/snake-tail-w.png) center center; }
+.snake-tail.north.east { background: transparent url(../img/snake-tail-n.png) center center; }
+.snake-tail.south.west { background: transparent url(../img/snake-tail-s.png) center center; }
+.snake-tail.south.east { background: transparent url(../img/snake-tail-e.png) center center; }
+
+/** ladder **/
+
+.ladder-body.east, .ladder-body.west { background: transparent url(../img/ladder-body-h.png) center center; }
+.ladder-body.north, .ladder-body.south { background: transparent url(../img/ladder-body-v.png) center center; }
+
+.ladder-body.east.north { background: transparent url(../img/ladder-turn-nw.png) center center; }
+.ladder-body.west.north { background: transparent url(../img/ladder-turn-sw.png) center center; }
+.ladder-body.east.south { background: transparent url(../img/ladder-turn-ne.png) center center; }
+.ladder-body.west.south { background: transparent url(../img/ladder-turn-se.png) center center; }
+
+.ladder-head.north { background: transparent url(../img/ladder-head-n.png) center center; }
+.ladder-head.east { background: transparent url(../img/ladder-head-e.png) center center; }
+.ladder-head.west { background: transparent url(../img/ladder-head-w.png) center center; }
+.ladder-head.south { background: transparent url(../img/ladder-head-s.png) center center; }
+
+.ladder-head.north.west { background: transparent url(../img/ladder-head-n.png) center center; }
+.ladder-head.north.east { background: transparent url(../img/ladder-head-e.png) center center; }
+.ladder-head.south.west { background: transparent url(../img/ladder-head-w.png) center center; }
+.ladder-head.south.east { background: transparent url(../img/ladder-head-s.png) center center; }
+
+.ladder-tail.north { background: transparent url(../img/ladder-tail-n.png) center center; }
+.ladder-tail.east { background: transparent url(../img/ladder-tail-e.png) center center; }
+.ladder-tail.west { background: transparent url(../img/ladder-tail-w.png) center center; }
+.ladder-tail.south { background: transparent url(../img/ladder-tail-s.png) center center; }
+
+.ladder-tail.north.west { background: transparent url(../img/ladder-tail-w.png) center center; }
+.ladder-tail.north.east { background: transparent url(../img/ladder-tail-n.png) center center; }
+.ladder-tail.south.west { background: transparent url(../img/ladder-tail-s.png) center center; }
+.ladder-tail.south.east { background: transparent url(../img/ladder-tail-e.png) center center; }
 
 #hud { position: fixed; top: 0; left: 0; }
 
@@ -283,7 +316,8 @@ body {
         -khtml-user-select: none; 
         -webkit-user-select: none; 
         -o-user-select: none; 
-} 
+}
+
 
 /* ==========================================================================
    Media Queries
@@ -433,6 +467,20 @@ body {
 @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
 /* Styles */
 
+
+    html, body {
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        margin: 0;
+    }
+
+    #game-board {
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        position:relative;
+    }
     #main-menu {
         width: 80%;
         height: 80%;
@@ -449,15 +497,32 @@ body {
         position: absolute;
         top: 0;
         left: 0;
-        overflow: hidden;
+        overflow: scroll;
     }
 
     #board {
         position: absolute;
         -webkit-transition: all 1s; /* For Safari 3.1 to 6.0 */
         transition: all 1s;
-        width: 80em;
-        height: 80em;
+        width:900px;
+        height:900px;
+    }
+
+    #players {
+        width:900px;
+        height: 900px;
+        pointer-events:none;
+        position:absolute;
+        background-color: rgba(120,20,20,0.3);
+
+    }
+
+    #players-container {
+        width:100%;
+        height:100%;
+        position: absolute;
+        overflow: scroll;
+        pointer-events:none;
     }
 
 }

@@ -43,7 +43,7 @@
             for (var i in this.snakes) {
                 // add a reference to the starting
                 var tile = $("#tile-" + this.pad(this.snakes[i].start, 2));
-                var snakeDiv = $("<div class='snake' data-value='" + this.snakes[i].length + "'>o shit.. a snake x" + this.snakes[i].length + "</div>");
+                var snakeDiv = $("<div class='snake' data-value='" + this.snakes[i].length + "'>x" + this.snakes[i].length + "</div>");
                 // console.log(tile);
                 tile.append(snakeDiv);
                 tile.addClass('snake-tile');
@@ -53,45 +53,10 @@
                 // add a reference to the starting
                 // add a reference to the starting
                 var tile = $("#tile-" + this.pad(this.ladders[i].start, 2));
-                var ladderDiv = $("<div class='ladder' data-value='" + this.ladders[i].length + "'>thank jeebus! a ladder x" + this.ladders[i].length + "</div>");
+                var ladderDiv = $("<div class='ladder' data-value='" + this.ladders[i].length + "'>x" + this.ladders[i].length + "</div>");
                 tile.append(ladderDiv);
                 tile.addClass('ladder-tile');
             }
-
-
-
-            $(".snake-tile").on("click", function() {
-                
-                var number = $(this).find(".snake").data("value");
-                var tileNum = Number($(this).attr("id").replace("tile-", ""));
-
-                for (var i = 0; i < number; i++) {
-                    if (i == 0) {
-                        $("#tile-" + board.pad(tileNum - i, 2)).addClass("snake-head");
-                    } else if (i == number - 1) {
-                        $("#tile-" + board.pad(tileNum - i, 2)).addClass("snake-tail");
-                    } else {
-                        $("#tile-" + board.pad(tileNum - i, 2)).addClass("snake-body");
-                    }
-                }
-            });
-
-            $(".ladder-tile").on("click", function() {
-
-                var number = $(this).find(".ladder").data("value");
-                var tileNum = Number($(this).attr("id").replace("tile-", ""));
-
-                for (var i = 0; i < number; i++) {
-                    if (i == 0) {
-                        $("#tile-" + board.pad(tileNum + i, 2)).addClass("ladder-tail");
-                    } else if (i == number - 1) {
-                        $("#tile-" + board.pad(tileNum + i, 2)).addClass("ladder-head");
-                    } else {
-                        $("#tile-" + board.pad(tileNum + i, 2)).addClass("ladder-body");
-                    }
-                }
-
-            });
 
             for (var i in game.activePlayers) {
                 
@@ -119,7 +84,7 @@
         },
 
         drawSnake: function(tileId, moveAmount) {
-            
+
             $(".ladder-tail, .ladder-head, .ladder-body, .snake-tail, .snake-head, .snake-body").removeClass("ladder-tail ladder-head ladder-body snake-tail snake-head snake-body");
 
             var number = moveAmount;
@@ -141,15 +106,6 @@
             var playerDiv = $("<div data-index='" + position + "' id='" + playerId + "' class='" + avatar + "'>");
             
             $("#players").append(playerDiv);
-
-            $('#' + playerId).sprite({
-                fps: 12,
-                no_of_frames: 3
-            });
-
-            $('#' + playerId).on("click", function(event) {
-                $(this).spToggle();
-            });
 
             this.getTileArm(position);
             this.setBirdToTile(position);
@@ -203,13 +159,25 @@
             $("#" + this.activePlayer).data("index", tile);
             // console.log($("#" + this.activePlayer).data("index"));
             tile += 1;
-            
-            TweenMax.to($("#" + this.activePlayer), 1, {
-                left: $("#tile-" + this.pad(tile, 2)).offset().left,
-                top: $("#tile-" + this.pad(tile, 2)).offset().top,
-                ease: Linear.easeOut,
-                onComplete: this.moveBird
-            });
+
+			if(mobilecheck()){
+				TweenMax.to($("#" + this.activePlayer), 1, {
+					left: $("#tile-" + this.pad(tile, 2)).css("left"),
+					top: $("#tile-" + this.pad(tile, 2)).css("top"),
+					ease: Linear.easeOut,
+					onComplete: this.moveBird
+				});
+			} else {
+				TweenMax.to($("#" + this.activePlayer), 1, {
+					left: $("#tile-" + this.pad(tile, 2)).offset().left,
+					top: $("#tile-" + this.pad(tile, 2)).offset().top,
+					ease: Linear.easeOut,
+					onComplete: this.moveBird
+				});
+			}
+
+
+
         },
 
         moveBird: function() {
@@ -234,6 +202,7 @@
             if (board.getTileArm(pindex) == board.getTileArm(board.targetIndex)) {
                 // console.log("Go Directly");
                 board.setBirdToTile(board.targetIndex - 1);
+
             } else {
                 // console.log("Go to end");
                 board.goToEnd();
