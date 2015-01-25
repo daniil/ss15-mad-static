@@ -235,6 +235,8 @@
 
             console.log("THIS IS THE END, MY SO CALLED FRIEND, THE END", spacesMoved);
             fb.postRoll(this.playerId, spacesMoved);
+
+            challenges.resetChallenge();
         },
 
         displayDialog: function(dialog) {
