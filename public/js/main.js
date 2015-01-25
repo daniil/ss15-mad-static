@@ -265,11 +265,19 @@
         },
 
         displayDialog: function(dialog) {
-            $("#"+dialog+",#dialogs").fadeIn("fast");
+            //$("#"+dialog+",#dialogs" ).removeClass("bounceOut").addClass("animated");
+			$("#dialogs" ).css("opacity",1);
+			$("#" + dialog ).show();
+			$("#" + dialog ).removeClass("bounceOut" ).addClass("animated bounceIn");
         },
 
         hideDialog: function(dialog) {
-            $("#"+dialog+",#dialogs").fadeOut("slow");
+            //$("#"+dialog+",#dialogs" ).addClass("animated bounceOut");
+
+			$("#" + dialog).removeClass("bounceIn" ).addClass(" bounceOut");
+			$("#" + dialog ).hide();
+			$("#dialogs" ).css("opacity",0);
+
         },
 
     	displayMessage: function(message) {
