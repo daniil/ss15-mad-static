@@ -22,7 +22,7 @@
       roundStep: 1,
       currStep: 3,
       round: 0,
-      timeLimit: 25
+      timeLimit: 60
     },
 
     isInteractive: true,
@@ -228,7 +228,7 @@
         challenges.animateMove(i, val);
       });
 
-      challenges.runDelayedFn((challenges.currMove.length * 750) + 200, function() {
+      challenges.runDelayedFn((challenges.currMove.length * 500) + 200, function() {
         challenges.isInteractive = true;
         challenges.steps.currStep = challenges.currMove.length;
         challenges.updateUI();
@@ -337,10 +337,11 @@
         roundStep: 1,
         currStep: 3,
         round: 0,
-        timeLimit: 25
+        timeLimit: 60
       };
 
       $('.simon-says-game-timer-value').text(challenges.steps.timeLimit);
+      $('.simon-says-game-timer-value').removeClass('warning');
 
       challenges.roomRef.child('moves').remove();
       challenges.roomRef.child('players').remove();
