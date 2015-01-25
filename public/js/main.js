@@ -258,20 +258,19 @@
 
             var spacesMoved = Math.round(gameResults.points * ratio);
             spaceMoved = Math.max(spacesMoved, 3);
+
             // var spacesMoved = Math.round(gameResults.points * ratio) + (ratio === 0) ? 1 : 0;
 
             // Draw a snake or a ladder before moving to that position
             var currPos = game.activePlayers[this.playerId].position;
             var currTile = $('#board-container').find('#tile-' + board.pad(currPos, 2));
             
-            console.log("GAME DONE", currPos, currTile, "END", spaceMoved);
-
             if (currTile.hasClass('ladder-tile')) {
                 board.drawLadder(currPos, spacesMoved);
                 fb.postRoll(this.playerId, spacesMoved);
             } else if (currTile.hasClass('snake-tile')) {
                 board.drawSnake(currPos, spacesMoved);
-                fb.postRoll(this.playerId, -spacesMoved);
+                fb.postRoll(this.playerId, -(gameResults.points-spacesMoved));
             }
 
             challenges.runDelayedFn(5000, function() {

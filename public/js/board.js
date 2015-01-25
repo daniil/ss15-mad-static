@@ -146,6 +146,34 @@
             this.moveBird();
         },
 
+        goToEndBackwards: function() {
+            var pindex = $("#" + this.activePlayer).data("index");
+
+            var tile_tally = 0;
+            console.log("GOING DOWN");
+            for (var i in this.tileArmLength) {
+                tile_tally += this.tileArmLength[i];
+            }
+
+            for (var i = 0; i >= 0; i =this.tileArmLength -1) {
+
+                if (tile_tally < pindex) {
+
+                    var tile_end = tile_tally;
+
+                    if (pindex == tile_end) {
+                        tile_end -= this.tileArmLength[i];
+                    }
+
+                    this.setBirdToTile(tile_end);
+
+                    break;
+                }
+
+                tile_tally -= this.tileArmLength[i];
+            }
+        },
+
         goToEnd: function() {
 
             var pindex = $("#" + this.activePlayer).data("index");
@@ -204,6 +232,8 @@
         moveBird: function() {
             var pindex = $("#" + board.activePlayer).data("index");
             
+            // console.log(pindex, board.targetIndex);
+
             if (board.targetIndex - 1 == pindex) {
                 
                 if ($("#tile-" + board.pad(pindex + 1, 2)).hasClass("ladder-tile"))  {
@@ -224,7 +254,12 @@
 
             } else {
                 // console.log("Go to end");
-                board.goToEnd();
+                if (board.targetIndex < pindex){
+                    board.goToEndBackwards();
+                } else {
+                    board.goToEnd();
+                }
+                
             }
         },
 
