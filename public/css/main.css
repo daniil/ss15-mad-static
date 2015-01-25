@@ -210,9 +210,21 @@ body {
     display: none;
 }
 
-.dialog { display: none; background-color: rgba(0,0,0,0.2);}
+.dialog { display: none; background-color: rgba(0,0,0,0.4);}
 #message { position: absolute; bottom: 0; padding: 2em 0 ; text-align: center; width: 100%; }
 .error { color: red; }
+
+
+.dialog p, .dialog .actions {
+            color:#111;
+        }
+
+        .dialog .actions button {
+            padding:1rem 5rem;
+            background-color: chartreuse;
+            border:none;
+            font-weight: bold;
+        }
 
 /* ==========================================================================
    Media Queries

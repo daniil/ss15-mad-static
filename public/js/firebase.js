@@ -43,7 +43,7 @@
                     order: [],
                     currentPlayerTurn: 0
                 });
-
+                console.log("COMPLETE");
                 game.displayMessage("ROOM " + roomId + " WAS CREATED SUCCESSFULLY");
             }
         },
