@@ -212,7 +212,7 @@
                 obj.position += rollAmount;
                 fb.playersRef.child(playerId).set(obj);
 
-                game.rollComplete();
+                // game.rollComplete();
             });
 
         },

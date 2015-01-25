@@ -36,6 +36,7 @@
             var number = Math.ceil(dice.randomDieNumber(dice.maxX + dice.maxY) * 6);
             game.displayMessage("you rolled a " + number);
             game.rollDice(number);
+            dice.disableRoll();
         },
 
         disableRoll: function() {

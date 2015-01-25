@@ -102,6 +102,7 @@
     		} else {
                 dice.disableRoll();
             }
+
     	},
 
     	updateOrder: function(data) {
@@ -116,6 +117,13 @@
 
         rollComplete: function() {
             fb.nextTurn(this.playerId);
+        },
+
+        turnComplete: function(playersTurn) {
+            console.log(playersTurn, this.playerId);
+            if (playersTurn == this.playerId) {
+                fb.nextTurn(this.playerId);
+            }
         },
 
     	initGame: function() {
