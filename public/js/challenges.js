@@ -36,6 +36,7 @@
 
       challenges.playerRef.on('value', function(s) {
         if (s.val()) {
+
           if (!challenges.challengeStarted) {
             challenges.initEvents();
             challenges.initMoves();
@@ -44,14 +45,17 @@
 
           $('#simon-says-container').show();
           $('#game-board').hide();
+          $('#hud').hide();
 
           challenges.processChange(s);
 
           challenges.challengeStarted = true;
+
         } else {
 
           $('#simon-says-container').hide();
           $('#game-board').show();
+          $('#hud').show();
 
         }
       });
@@ -251,7 +255,7 @@
           $('.simon-says-lobby').hide();
           $('.simon-says-game').show();
           
-          if (!challenges.gameTimer) {
+          if (!challenges.gameTimer && challenges.challengeStarted) {
             challenges.gameTimer = setInterval(challenges.updateGameTimer, 1000);
           }
         }
@@ -305,6 +309,7 @@
 
       if (challenges.steps.timeLimit === 0) {
         clearInterval(challenges.gameTimer);
+        challenges.gameTimer = null;
         challenges.finishGame();
       }
     },
@@ -320,7 +325,7 @@
 
     resetChallenge: function() {
       challengeStarted = false;
-      
+
       challenges.steps = {
         starting: 3,
         roundStep: 1,
@@ -328,6 +333,8 @@
         round: 0,
         timeLimit: 60
       };
+
+      $('.simon-says-game-timer-value').text(challenges.steps.timeLimit);
 
       challenges.roomRef.child('players').remove();
     },

@@ -256,7 +256,7 @@
                 ratio = gameResults.players[me].score / totalScore;
             }
 
-            var spacesMoved = Math.round(gameResults.points * ratio);
+            var spacesMoved = Math.round(gameResults.points * ratio) + (ratio === 0) ? 1 : 0;
 
             console.log("THIS IS THE END, MY SO CALLED FRIEND, THE END", spacesMoved);
             fb.postRoll(this.playerId, spacesMoved);
