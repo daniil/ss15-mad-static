@@ -19,6 +19,7 @@
     "hammer.js": "~2.0.4",
     "jquery.hammer.js": "~2.0.0",
     "firebase": "~2.1.1",
-    "gsap": "~1.15.0"
+    "gsap": "~1.15.0",
+    "modernizr": "~2.8.3"
   }
 }
