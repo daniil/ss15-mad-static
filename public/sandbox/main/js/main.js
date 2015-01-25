@@ -55,13 +55,7 @@
 	            fb.checkIfRoomExists(room, fb.joinBoardRoomExistsCallback);
 	        });
 
-            window.onbeforeunload = game.removeUser;
-
     	},
-
-        removeUser: function() {
-            return "why are you leaving?";
-        },
 
     	playerChanged: function(data) {
     		// var playerId = data.name;

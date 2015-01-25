@@ -136,6 +136,8 @@
                     this.playersRef.on("child_added", this.onPlayerAdded);
                     this.playersRef.on("child_changed", this.onPlayerChanged);
 
+                   
+
                     // board.init();
 
                     this.roomsRef = new Firebase(fb.roomUrl + "/" + roomId);
@@ -145,7 +147,6 @@
 
                         var newOrder = val.order || [];
                         newOrder.push(playerId);
-                        console.log(newOrder, fb.roomsRef);
 
                         if (numPlayers == 3) {
                             fb.roomsRef.set({
@@ -173,6 +174,9 @@
 
                         // board.init();
                     });
+
+                    fb.playersRef.onDisconnect().remove();
+                    fb.roomsRef.onDisconnect().remove();
 
                     fb.roomsRef.on("child_changed", this.onActiveRoomChanged);
 
@@ -221,15 +225,18 @@
                 turn ++;
                 turn %= val.order.length;
 
-
                 fb.roomsRef.set({
                     name: roomId,
                     open: false,
                     order: val.order,
                     currentPlayerTurn: turn
                 });
-                
             });
+        },
+
+        removePlayer: function(playerId) {
+            var removeRef = new Firebase(this.playerUrl + "/" + game.roomId + "/" + game.playerId);
+            removeRef.remove();
         },
 
         movePlayer: function(playerId, moveAmount) {
