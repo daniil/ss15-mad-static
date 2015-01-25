@@ -106,6 +106,21 @@
             var playerDiv = $("<div data-index='" + position + "' id='" + playerId + "' class='" + avatar + "'>");
             
             $("#players").append(playerDiv);
+console.log(avatar);
+            if (avatar == "avatar0") {
+
+                console.log("sprite");
+
+                $('#' + playerId).sprite({
+                    fps: 12,
+                    no_of_frames: 5
+                });
+            }
+            // $(this).spStop();
+            // $('#' + playerId).on("click", function(event) {
+                
+            // });
+
 
             this.getTileArm(position);
             this.setBirdToTile(position);

@@ -150,9 +150,10 @@ body {
 }*/
 
 .avatar0 {
-    background:url(../img/gamepiece-blue.png);
+    background:url(../img/gamepiece-blue-ss.png);
     width: 100px;
     height: 100px;
+    overflow: hidden;
     display:block;  
     position:absolute;
 }
