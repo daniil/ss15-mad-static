@@ -167,7 +167,7 @@
 
                         rr.once('value', function(snapshot) {
                             var val = snapshot.val();
-                            console.log(val)
+                            
                             game.updateOrder(val);
                         });
 
@@ -206,8 +206,30 @@
                 var obj = snapshot.val();
                 obj.position += rollAmount;
                 fb.playersRef.child(playerId).set(obj);
+
+                game.rollComplete();
             });
 
+        },
+
+        nextTurn: function () {
+            this.roomsRef = new Firebase(fb.roomUrl + "/" + roomId);
+
+            this.roomsRef.once('value', function(snapshot) {
+                var val = snapshot.val();
+                var turn = val.currentPlayerTurn;
+                turn ++;
+                turn %= val.order.length;
+
+
+                fb.roomsRef.set({
+                    name: roomId,
+                    open: false,
+                    order: val.order,
+                    currentPlayerTurn: turn
+                });
+                
+            });
         },
 
         movePlayer: function(playerId, moveAmount) {
@@ -219,7 +241,7 @@
         },
 
         joinRoom: function(playerId) {
-            
+
         },
 
         onActiveRoomChanged: function(snapshot) {

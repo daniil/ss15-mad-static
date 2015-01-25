@@ -55,7 +55,13 @@
 	            fb.checkIfRoomExists(room, fb.joinBoardRoomExistsCallback);
 	        });
 
+            window.onbeforeunload = game.removeUser;
+
     	},
+
+        removeUser: function() {
+            return "why are you leaving?";
+        },
 
     	playerChanged: function(data) {
     		// var playerId = data.name;
@@ -112,6 +118,10 @@
 
         rollDice: function(value) {
             fb.postRoll(this.playerId, value);
+        },
+
+        rollComplete: function() {
+            fb.nextTurn(playerId);
         },
 
     	initGame: function() {
