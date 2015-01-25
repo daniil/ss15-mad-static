@@ -12,7 +12,8 @@
     <title>MAD Static - Snakes and Ladders</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    
+
+    <link rel="stylesheet" href="css/animate.css" /> 
     <link rel="stylesheet" href="css/app.css">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/simon-says.css">
@@ -21,38 +22,40 @@
 
 </head>
 
-<body> 
+<body>
 
-    <div id="main-menu">
-        <h1>Welcome to MAD Static's Snakes and Ladders</h1>
-        <form id="game-setup">
-            <fieldset>
-                <p>
-                    <label for="roomId">Room ID: </label>
-                    <input type="text" name="roomId" id="roomId" />
-                    <input type="button" name="room-create" id="room-create" value="create">
-                </p>
-            </fieldset>
-            <fieldset>
-                <p>
-                    <label for="playerId">Player ID: </label>
-                    <input type="text" name="playerId" id="playerId" />
-                    <label for="avatarId">Avatar ID: </label>
-                    <select name="avatar" id="avatar">
-                        <option value="0" selected>0</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                    </select>
-                    <input type="button" name="room-join" id="room-join" value="join">
-                </p>
-                <p>
-                    <input type="button" name="room-join-board" id="room-join-board" value="join-as-board">
-                </p>
-            </fieldset>
-        </form>
+<div id="main-menu">
+    <h1>Welcome to MAD Static's Snakes and Ladders</h1>
+    <form id="game-setup">
+        <div class="field-row">
+            <label for="roomId">Create a room:</label>
+            <input type="text" name="roomId" id="roomId" placeholder="Enter a room name..." />
+        </div>
+        <div class="btn-row">
+            <input class="btn" type="button" name="room-create" id="room-create" value="create">
+        </div>
+        <div class="field-row">
+            <label for="playerId">Enter a player name:</label>
+            <input type="text" name="playerId" id="playerId" placeholder="Minimum 4 characters" />
+        </div>
+        <div class="field-row">
+            <label for="avatarId">Avatar ID:</label>
+            <select name="avatar" id="avatar">
+                <option value="0" selected>0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+            </select>
+        </div>
+        <div class="btn-row">
+            <input class="btn" type="button" name="room-join" id="room-join" value="Join">
+        </div>
+        <div class="btn-row">
+            <input class="btn" type="button" name="room-join-board" id="room-join-board" value="Watch">
+        </div>
+    </form>
 
-    </div>
+</div>
     
     <div id="game-board">
         <div id="board-container">
