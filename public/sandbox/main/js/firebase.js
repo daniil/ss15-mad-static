@@ -168,7 +168,7 @@
 
                         rr.once('value', function(snapshot) {
                             var val = snapshot.val();
-                            console.log(val)
+                            
                             game.updateOrder(val);
                         });
 
@@ -203,19 +203,41 @@
         postRoll: function(playerId, rollAmount) {
 
             // var playersRef = new Firebase(playerUrl);
-            this.playersRef.child(roomId).child(playerId).once('value', function(snapshot) {
+            this.playersRef.child(playerId).once('value', function(snapshot) {
                 var obj = snapshot.val();
                 obj.position += rollAmount;
-                playersRef.child(roomId).child(playerId).set(obj);
+                fb.playersRef.child(playerId).set(obj);
+
+                game.rollComplete();
             });
 
         },
 
+        nextTurn: function () {
+            this.roomsRef = new Firebase(fb.roomUrl + "/" + roomId);
+
+            this.roomsRef.once('value', function(snapshot) {
+                var val = snapshot.val();
+                var turn = val.currentPlayerTurn;
+                turn ++;
+                turn %= val.order.length;
+
+
+                fb.roomsRef.set({
+                    name: roomId,
+                    open: false,
+                    order: val.order,
+                    currentPlayerTurn: turn
+                });
+                
+            });
+        },
+
         movePlayer: function(playerId, moveAmount) {
-            this.playersRef.child(roomId).child(playerId).once('value', function(snapshot) {
+            fb.playersRef.child(playerId).once('value', function(snapshot) {
                 var obj = snapshot.val();
                 obj.position += moveAmount;
-                playersRef.child(roomId).child(playerId).set(obj);
+                fb.playersRef.child(playerId).set(obj);
             });
         },
 
@@ -232,11 +254,11 @@
                 game.activePlayers = snapshot.val();
                 game.showPlayersInRoom();
             });
+
             fb.roomsRef.once("value", function(snapshot) {
                 var data = snapshot.val();
                 game.updateTurn(data);
             });
-
 
         },
 

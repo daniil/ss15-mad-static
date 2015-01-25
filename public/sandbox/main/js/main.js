@@ -55,7 +55,13 @@
 	            fb.checkIfRoomExists(room, fb.joinBoardRoomExistsCallback);
 	        });
 
+            window.onbeforeunload = game.removeUser;
+
     	},
+
+        removeUser: function() {
+            return "why are you leaving?";
+        },
 
     	playerChanged: function(data) {
     		// var playerId = data.name;
@@ -95,11 +101,13 @@
             // console.log("ASDASDAS", data)
     		this.updateOrder(data);
 
-
     		var player = data.order[data.currentPlayerTurn];
     		if (player == game.playerId) {
-    			alert('it is your turn');
-    		}
+    			alert('it is your turn ' + game.playerId);
+                dice.enableRoll();
+    		} else {
+                dice.disableRoll();
+            }
     	},
 
     	updateOrder: function(data) {
@@ -107,6 +115,14 @@
     		$("#activePlayers ul li.active").removeClass("active");
     		$("#legend-" + data.order[data.currentPlayerTurn]).addClass("active");
     	},
+
+        rollDice: function(value) {
+            fb.postRoll(this.playerId, value);
+        },
+
+        rollComplete: function() {
+            fb.nextTurn(playerId);
+        },
 
     	initGame: function() {
     		
