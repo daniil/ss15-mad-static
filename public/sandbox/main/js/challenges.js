@@ -47,6 +47,7 @@
           $('#game-board').hide();
 
           challenges.processChange(s);
+          updateUI();
 
           challenges.challengeStarted = true;
         }
