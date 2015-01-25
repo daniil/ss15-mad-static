@@ -147,29 +147,15 @@
                         var newOrder = val.order || [];
                         newOrder.push(playerId);
 
+                        var obj = { name: roomId, order: newOrder, open: true, currentPlayerTurn: 0 };
+
                         if (numPlayers == 3) {
-                            fb.roomsRef.set({
-                                name: roomId,
-                                open: false,
-                                order: newOrder,
-                                currentPlayerTurn: 0
-                            });
-                        } else {
-                            fb.roomsRef.set({
-                                name: roomId,
-                                open: true,
-                                order: newOrder,
-                                currentPlayerTurn: 0
-                            });
-                        }
-
-                        var rr = new Firebase(fb.roomUrl + "/" + roomId);
-
-                        rr.once('value', function(snapshot) {
-                            var val = snapshot.val();
                             
-                            game.updateOrder(val);
-                        });
+                            obj.open = false
+                        } 
+                    
+                        fb.roomsRef.set(obj);
+                        game.updateOrder(obj);
 
                     });
 
@@ -214,6 +200,15 @@
                 // game.rollComplete();
             });
 
+        },
+
+        initTurns: function() {
+            this.roomsRef = new Firebase(this.roomUrl + "/" + game.roomId);
+
+            this.roomsRef.once('value', function(snapshot) {
+                var val = snapshot.val();
+                game.updateTurn(val);
+            });
         },
 
         nextTurn: function () {
@@ -287,8 +282,8 @@
                         game.startGame();
                         game.hideDialog("waiting");
                     }
-                } else {
-                   // game.updateTurn(data); 
+                } else if (game.isGameStarted) {
+                   game.updateTurn(data); 
                 }
                 
             });

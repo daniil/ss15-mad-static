@@ -57,6 +57,12 @@
                 tile.append(ladderDiv);
                 tile.addClass('ladder-tile');
             }
+
+            for (var i in game.activePlayers) {
+                
+                var player = game.activePlayers[i];
+                this.addPlayer(player.name, "avatar" + player.avatar, player.position);
+            }
         },
 
         addPlayer: function(playerId, avatar, position) {
