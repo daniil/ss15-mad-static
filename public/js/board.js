@@ -100,6 +100,37 @@
             }
         },
 
+        drawLadder: function(tileId, moveAmount) {
+            var number = moveAmount;
+            var tileNum = tileId;
+
+            for (var i = 0; i < number; i++) {
+                if (i == 0) {
+                    $("#tile-" + board.pad(tileNum + i, 2)).addClass("ladder-tail");
+                } else if (i == number - 1) {
+                    $("#tile-" + board.pad(tileNum + i, 2)).addClass("ladder-head");
+                } else {
+                    $("#tile-" + board.pad(tileNum + i, 2)).addClass("ladder-body");
+                }
+            }
+        },
+
+        drawSnake: function(tileId, moveAmount) {
+
+            var number = moveAmount;
+            var tileNum = tileId;
+
+            for (var i = 0; i < number; i++) {
+                if (i == 0) {
+                    $("#tile-" + board.pad(tileNum - i, 2)).addClass("snake-head");
+                } else if (i == number - 1) {
+                    $("#tile-" + board.pad(tileNum - i, 2)).addClass("snake-tail");
+                } else {
+                    $("#tile-" + board.pad(tileNum - i, 2)).addClass("snake-body");
+                }
+            }
+        },
+
         addPlayer: function(playerId, avatar, position) {
 
             var playerDiv = $("<div data-index='" + position + "' id='" + playerId + "' class='" + avatar + "'>");

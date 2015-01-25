@@ -199,7 +199,7 @@
         },
 
         gameOver: function() {
-
+            console.log("we should do something when the game is over");
         },
 
         challengeMiniGame: function(e) {
