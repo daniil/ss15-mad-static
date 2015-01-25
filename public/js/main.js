@@ -257,7 +257,7 @@
             }
 
             var spacesMoved = Math.round(gameResults.points * ratio);
-            spaceMoved = Math.max(spacesMoved, 3);
+            
 
             // var spacesMoved = Math.round(gameResults.points * ratio) + (ratio === 0) ? 1 : 0;
 
@@ -266,11 +266,13 @@
             var currTile = $('#board-container').find('#tile-' + board.pad(currPos, 2));
             
             if (currTile.hasClass('ladder-tile')) {
+                spaceMoved = Math.max(spacesMoved, 3);
                 board.drawLadder(currPos, spacesMoved);
                 fb.postRoll(this.playerId, spacesMoved);
             } else if (currTile.hasClass('snake-tile')) {
+                spacesMoved = Math.max(gameResults.points-spacesMoved, 3);
                 board.drawSnake(currPos, spacesMoved);
-                fb.postRoll(this.playerId, -(gameResults.points-spacesMoved));
+                fb.postRoll(this.playerId, -spacesMoved);
             }
 
             challenges.runDelayedFn(5000, function() {

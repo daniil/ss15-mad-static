@@ -149,18 +149,14 @@
         goToEndBackwards: function() {
             var pindex = $("#" + this.activePlayer).data("index");
 
-            var tile_tally = 0;
-            console.log("GOING DOWN");
-            for (var i in this.tileArmLength) {
-                tile_tally += this.tileArmLength[i];
-            }
+            var tile_tally = 81;
 
-            for (var i = 0; i >= 0; i =this.tileArmLength -1) {
-
+            for (var i = this.tileArmLength -1; i >= 0; i--) {
+                console.log(tile_tally, pindex);
                 if (tile_tally < pindex) {
 
                     var tile_end = tile_tally;
-
+                    
                     if (pindex == tile_end) {
                         tile_end -= this.tileArmLength[i];
                     }
