@@ -60,10 +60,10 @@ body {
 
 .tile-container {
     background-color: white;
-    width: 100vw;
-    height: 100vh;
-    max-width: 100vh;
-    max-height: 100vw;
+    /*width: 100vw;*/
+    /*height: 100vh;*/
+    /*max-width: 100vh;*/
+    /*max-height: 100vw;*/
     margin: auto;
     position: relative;
     background-image: url(../img/board.png);
@@ -259,7 +259,8 @@ body {
         -khtml-user-select: none; 
         -webkit-user-select: none; 
         -o-user-select: none; 
-} 
+}
+
 
 /* ==========================================================================
    Media Queries
@@ -409,6 +410,20 @@ body {
 @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
 /* Styles */
 
+
+    html, body {
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        margin: 0;
+    }
+
+    #game-board {
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        position:relative;
+    }
     #main-menu {
         width: 80%;
         height: 80%;
@@ -425,15 +440,32 @@ body {
         position: absolute;
         top: 0;
         left: 0;
-        overflow: hidden;
+        overflow: scroll;
     }
 
     #board {
         position: absolute;
         -webkit-transition: all 1s; /* For Safari 3.1 to 6.0 */
         transition: all 1s;
-        width: 80em;
-        height: 80em;
+        width:900px;
+        height:900px;
+    }
+
+    #players {
+        width:900px;
+        height: 900px;
+        pointer-events:none;
+        position:absolute;
+        background-color: rgba(120,20,20,0.3);
+
+    }
+
+    #players-container {
+        width:100%;
+        height:100%;
+        position: absolute;
+        overflow: scroll;
+        pointer-events:none;
     }
 
 }

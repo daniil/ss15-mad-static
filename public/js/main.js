@@ -72,6 +72,15 @@
             $("#main-menu").fadeOut();
             $("#game-board").fadeIn();
 
+			if(window.mobilecheck()){
+				$("#board-container" ).on("scroll",function(){
+					$this = $(this);
+					var $playersContainer = $("#players-container");
+					$playersContainer.scrollLeft($this.scrollLeft());
+					$playersContainer.scrollTop($this.scrollTop());
+				});
+			}
+
             this.displayDialog("waiting");
 
             $("#waiting .cta").on("click", function(e) {

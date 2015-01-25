@@ -139,6 +139,12 @@
                 ease: Linear.easeOut,
                 onComplete: this.moveBird
             });
+
+			if(window.mobilecheck()){
+				$("#board-container" ).scrollLeft($("#tile-" + this.pad(tile, 2)).offset().left);
+				$("#board-container" ).scrollTop($("#tile-" + this.pad(tile, 2)).offset().top);
+			}
+
         },
 
         moveBird: function() {
