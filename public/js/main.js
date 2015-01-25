@@ -256,24 +256,26 @@
                 ratio = gameResults.players[me].score / totalScore;
             }
 
-            var spacesMoved = Math.round(gameResults.points * ratio) + (ratio === 0) ? 1 : 0;
-
-            console.log("THIS IS THE END, MY SO CALLED FRIEND, THE END", spacesMoved);
+            var spacesMoved = Math.round(gameResults.points * ratio);
+            spaceMoved = Math.max(spacesMoved, 3);
+            // var spacesMoved = Math.round(gameResults.points * ratio) + (ratio === 0) ? 1 : 0;
 
             // Draw a snake or a ladder before moving to that position
             var currPos = game.activePlayers[this.playerId].position;
             var currTile = $('#board-container').find('#tile-' + board.pad(currPos, 2));
+            
+            console.log("GAME DONE", currPos, currTile, "END", spaceMoved);
 
             if (currTile.hasClass('ladder-tile')) {
                 board.drawLadder(currPos, spacesMoved);
+                fb.postRoll(this.playerId, spacesMoved);
             } else if (currTile.hasClass('snake-tile')) {
                 board.drawSnake(currPos, spacesMoved);
+                fb.postRoll(this.playerId, -spacesMoved);
             }
 
             challenges.runDelayedFn(5000, function() {
-                fb.postRoll(this.playerId, spacesMoved);
-                board.drawLadder(currPos, 0);
-                board.drawSnake(currPos, 0);
+                board.clearLadderAndSnakes();
             });
 
             challenges.resetChallenge();

@@ -101,6 +101,10 @@
             }
         },
 
+        clearLadderAndSnakes: function() {
+            $(".ladder-tail, .ladder-head, .ladder-body, .snake-tail, .snake-head, .snake-body").removeClass("ladder-tail ladder-head ladder-body snake-tail snake-head snake-body");
+        },
+
         addPlayer: function(playerId, avatar, position) {
 
             var playerDiv = $("<div data-index='" + position + "' id='" + playerId + "' class='" + avatar + "'>");
@@ -136,7 +140,7 @@
             this.activePlayer = playerId;
             this.targetIndex = targetIndex;
             // console.log($("#" + playerId))
-            
+
             // $("#" + this.activePlayer).spPlay();
             $("#" + playerId).spStart();
             this.moveBird();
@@ -199,9 +203,6 @@
 
         moveBird: function() {
             var pindex = $("#" + board.activePlayer).data("index");
-            
-            // console.log("pindex", pindex);
-            // console.log("board.targetIndex", board.targetIndex);
             
             if (board.targetIndex - 1 == pindex) {
                 

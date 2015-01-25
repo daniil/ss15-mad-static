@@ -194,6 +194,7 @@
             // var playersRef = new Firebase(playerUrl);
             this.playersRef.child(playerId).once('value', function(snapshot) {
                 var obj = snapshot.val();
+                console.log("ASDASDA", rollAmount);
                 obj.position += rollAmount;
                 fb.playersRef.child(playerId).set(obj);
 
