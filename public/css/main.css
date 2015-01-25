@@ -68,10 +68,8 @@ body {
 
 .tile-container {
     background-color: white;
-    width: 100vw;
-    height: 100vh;
-    max-width: 100vh;
-    max-height: 100vw;
+    width: 900px;
+    height: 900px;
     margin: auto;
     position: relative;
     background-image: url(../img/board.png);
