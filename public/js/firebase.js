@@ -67,7 +67,7 @@
                 roomsRef.once("value", function(snapshot) {
                     var val = snapshot.val();
                     game.updateOrder(val);
-                })
+                });
 
                 game.initBoard();
 
@@ -283,7 +283,7 @@
                         game.hideDialog("waiting");
                     }
                 } 
-                
+
                 if (game.gameIsRunning) {
                     
                    game.updateTurn(data); 
