@@ -1,5 +1,6 @@
 .simon-says-container {
   display: none;
+  width: 100%;
 }
 
 .simon-says-game {
@@ -51,7 +52,7 @@
 
 .simon-says-grid-block {
   float: left;
-  width: 100px;
+  width: calc(20% - 3px);
   height: 100px;
   background-color: #bdc3c7;
   margin: 0 3px 3px 0;
