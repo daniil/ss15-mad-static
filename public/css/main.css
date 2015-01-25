@@ -202,7 +202,7 @@ body {
 #game-board { display: none; }
 
 #dialogs {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -213,7 +213,7 @@ body {
 }
 
 #non-interactive-dialogs {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -222,6 +222,8 @@ body {
 
     
 }
+
+#hud { position: fixed; top: 0; left: 0; }
 
 .dialog { display: none; }
 

@@ -79,6 +79,8 @@
                 game.startGame();
             });
 
+            $("#current-room").html("current room: " + game.roomId);
+
         },
 
         startGame: function() {
@@ -194,6 +196,10 @@
             }
 
             this.displayDialog("challenge-opponent-ladder");
+        },
+
+        gameOver: function() {
+
         },
 
         challengeMiniGame: function(e) {
