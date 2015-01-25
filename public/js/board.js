@@ -145,14 +145,15 @@
             var pindex = $("#" + board.activePlayer).data("index");
 
             if (board.targetIndex - 1 == pindex) {
-                // console.log("complete", pindex, board.pad(pindex, 2));
-                // console.log($("#tile-" + board.pad(pindex + 1, 2)));
+                
                 if ($("#tile-" + board.pad(pindex + 1, 2)).hasClass("ladder-tile"))  {
-                    alert("landed on a ladder");
+                    game.landedOnLadder($("#tile-" + board.pad(pindex + 1, 2)).find(".ladder").data("value"));
                 } else if ($("#tile-" + board.pad(pindex + 1, 2)).hasClass("snake-tile"))  {
-                    alert("landed on a snake");
+                    game.landedOnSnake($("#tile-" + board.pad(pindex + 1, 2)).find(".snake").data("value"));
+                } else {
+                    game.turnComplete(board.activePlayer);    
                 }
-                game.turnComplete(board.activePlayer);
+                
                 return;
             }
             

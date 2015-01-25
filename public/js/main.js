@@ -162,16 +162,16 @@
             }
         },
 
-        landedOnSnake: function() {
+        landedOnSnake: function(pointValue) {
+            if (board.activePlayer !== game.playerId) return;
+
             $("#challenge-opponent-snake ul.challengePlayers").empty();
 
             for (var i in this.activePlayers) {
                 var player = this.activePlayers[i]; 
                 if (player.name != game.playerId) {
-                    var playerInfoDiv = $("<li id='challenge-" + player.name + "' class='challenge' data-name='" + player.name + "'>" + player.name + "<div class='avatar" + player.avatar + "'></div></li>");
-
+                    var playerInfoDiv = $("<li id='challenge-" + player.name + "' class='challenge' data-points='" + pointValue + "' data-name='" + player.name + "'>" + player.name + "<div class='avatar" + player.avatar + "'></div></li>");
                     $("#challenge-opponent-snake ul.challengePlayers").append(playerInfoDiv);
-
                     $("#challenge-opponent-snake ul.challengePlayers li").on("click", game.challengeMiniGame);
                 }
             }
@@ -179,13 +179,14 @@
             this.displayDialog("challenge-opponent-snake");
         },
 
-        landedOnLadder: function() {
+        landedOnLadder: function(pointValue) {
+            if (board.activePlayer !== game.playerId) return;
             $("#challenge-opponent-ladder ul.challengePlayers").empty();
 
             for (var i in this.activePlayers) {
                 var player = this.activePlayers[i]; 
                 if (player.name != game.playerId) {
-                    var playerInfoDiv = $("<li id='challenge-" + player.name + "' class='challenge' data-name='" + player.name + "'>" + player.name + "<div class='avatar" + player.avatar + "'></div></li>");
+                    var playerInfoDiv = $("<li id='challenge-" + player.name + "' class='challenge' data-points='" + pointValue + "' data-name='" + player.name + "'>" + player.name + "<div class='avatar" + player.avatar + "'></div></li>");
                     $("#challenge-opponent-ladder ul.challengePlayers").append(playerInfoDiv);
                     $("#challenge-opponent-ladder ul.challengePlayers li").on("click", game.challengeMiniGame);    
                 }
@@ -195,10 +196,13 @@
         },
 
         challengeMiniGame: function(e) {
-            game.challengePlayer(game.playerId, $(e.currentTarget).data("name"));
+            game.hideDialog("challenge-opponent-ladder");  
+            game.hideDialog("challenge-opponent-snake");  
+            game.challengePlayer(game.playerId, $(e.currentTarget).data("name"), $(e.currentTarget).data("points"));
         },
 
-        challengePlayer: function(player1Id, player2Id) {
+        challengePlayer: function(player1Id, player2Id, pointValue) {
+            console.log("POINTS AVAILABLE", pointValue);
             challenges.startChallenge(player1Id, player2Id);
         },
 
