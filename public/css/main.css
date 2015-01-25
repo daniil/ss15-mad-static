@@ -290,9 +290,11 @@ body {
     top: 20px;
     left: 20px;
     line-height: 20px;
+    background-color: rgba(37,188,193,0.9);
+    border-bottom-right-radius: 1rem;
 }
 #hud #current-room {
-    margin-bottom: 70px;
+    margin-bottom: 20px;
 }
 #hud #activePlayers {
     margin: 0;
@@ -622,7 +624,7 @@ body {
         /*min-width: 20em;*/
         /*margin: 0 auto;*/
         position: absolute;
-        background: #aaeeaa;
+        /*background: #aaeeaa;*/
         padding: 10%;
     }
 
@@ -650,7 +652,7 @@ body {
         height: 900px;
         pointer-events:none;
         position:absolute;
-        background-color: rgba(120,20,20,0.3);
+        /*background-color: rgba(120,20,20,0.3);*/
 
     }
 
