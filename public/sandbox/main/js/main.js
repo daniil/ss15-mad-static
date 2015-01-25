@@ -62,9 +62,23 @@
     		board.movePlayer(data.name, data.position)
     	},
 
+        playerAdded: function(data) {
+            this.activePlayers.push(data);
+            for (var i in this.activePlayers) {
+                var player = this.activePlayers[i]; 
+                var playerInfoDiv = $("<li id='legend-" + player.name + "'>" + player.name + "<div class='avatar" + player.avatar + "'></div></li>");
+                $("#activePlayers").append(playerInfoDiv);
+
+                board.addPlayer(player.name, "avatar" + player.avatar, player.position);
+                // this.playerChanged(player);
+            }
+        },
+
     	showPlayersInRoom: function() {
     		
 			this.initGame();
+            
+            $("#activePlayers").empty();
 
     		for (var i in this.activePlayers) {
     			var player = this.activePlayers[i]; 
@@ -78,7 +92,10 @@
     	},
 
     	updateTurn: function(data) {
-    		updateOrder(data);
+            // console.log("ASDASDAS", data)
+    		this.updateOrder(data);
+
+
     		var player = data.order[data.currentPlayerTurn];
     		if (player == game.playerId) {
     			alert('it is your turn');
@@ -86,6 +103,7 @@
     	},
 
     	updateOrder: function(data) {
+            // console.log("BASDASDAS", data)
     		$("#activePlayers ul li.active").removeClass("active");
     		$("#legend-" + data.order[data.currentPlayerTurn]).addClass("active");
     	},
