@@ -29,8 +29,8 @@
         },
 
         // room exist callback
-        createRoomExistsCallback: function(roomId, exists) {
-            if (exists) {
+        createRoomExistsCallback: function(roomId, snap) {
+            if (snap !== null) {
                 // check if i can join the room
                 game.displayError("THE ROOM ALREADY EXISTS");
             } else {
@@ -43,13 +43,13 @@
                     order: [],
                     currentPlayerTurn: 0
                 });
-                console.log("COMPLETE");
+                
                 game.displayMessage("ROOM " + roomId + " WAS CREATED SUCCESSFULLY");
             }
         },
 
-        joinBoardRoomExistsCallback: function(roomId, exists) {
-            if (exists) {
+        joinBoardRoomExistsCallback: function(roomId, snap) {
+            if (snap !== null) {
                 // check if i can join the room
                 fb.playersRef = new Firebase(fb.playerUrl + "/" + roomId);
 
@@ -66,9 +66,10 @@
                 roomsRef.on("child_changed", fb.onActiveRoomChanged);
                 roomsRef.once("value", function(snapshot) {
                     var val = snapshot.val();
-                    console.log(val);
                     game.updateOrder(val);
                 })
+
+                game.initBoard();
 
                 game.displayMessage("ROOM " + roomId + " WAS JOINED SUCCESSFULLY");
 
@@ -78,11 +79,10 @@
         },
 
 
-        joinRoomExistsCallback: function(roomId, exists) {
-            if (exists) {
+        joinRoomExistsCallback: function(roomId, snap) {
+            if (snap !== null) {
                 // check if i can join the room
                 var player = $("#playerId").val();
-
                 fb.checkIfPlayerExistsInRoom(roomId, player);
             } else {
                 game.displayError("THE ROOM DOESN'T EXIST");
@@ -91,10 +91,13 @@
 
         // check to see if a room exists
         checkIfRoomExists: function(roomId, callback) {
+
             var roomsRef = new Firebase(this.roomUrl);
+            
             roomsRef.child(roomId).once('value', function(snapshot) {
                 var exists = (snapshot.val() !== null);
-                callback(roomId, exists);
+
+                callback(roomId, snapshot.val());
             });
         },
 
@@ -121,7 +124,6 @@
                     game.playerId = playerId;
                     game.roomId = roomId;
 
-
                     // get the avatar
                     var avatar = $("#avatar").val();
 
@@ -136,10 +138,6 @@
                     // listen for changed to the players
                     this.playersRef.on("child_added", this.onPlayerAdded);
                     this.playersRef.on("child_changed", this.onPlayerChanged);
-
-                   
-
-                    // board.init();
 
                     this.roomsRef = new Firebase(fb.roomUrl + "/" + roomId);
 
@@ -173,7 +171,6 @@
                             game.updateOrder(val);
                         });
 
-                        // board.init();
                     });
 
                     fb.playersRef.onDisconnect().remove();
@@ -185,7 +182,9 @@
                         game.activePlayers = snapshot.val();
                         game.showPlayersInRoom();
                     });
-
+                    
+                    game.initBoard();
+            
                     game.displayMessage("ROOM " + roomId + " JOINED SUCCESSFULLY AS " + playerId);
                 } else {
                     game.displayError("THERE ARE TOO MANY PEOPLE IN " + roomId)
@@ -221,7 +220,9 @@
             this.roomsRef = new Firebase(this.roomUrl + "/" + game.roomId);
 
             this.roomsRef.once('value', function(snapshot) {
+
                 var val = snapshot.val();
+
                 var turn = val.currentPlayerTurn;
                 turn ++;
                 turn %= val.order.length;
@@ -231,6 +232,21 @@
                     open: false,
                     order: val.order,
                     currentPlayerTurn: turn
+                });
+            });
+        },
+
+        closeGame: function() {
+            this.roomsRef = new Firebase(this.roomUrl + "/" + game.roomId);
+
+            this.roomsRef.once('value', function(snapshot) {
+                var val = snapshot.val();
+                
+                fb.roomsRef.set({
+                    name: val.name,
+                    open: false,
+                    order: val.order,
+                    currentPlayerTurn: val.currentPlayerTurn
                 });
             });
         },
@@ -252,9 +268,10 @@
 
         },
 
-        onActiveRoomChanged: function(snapshot) {
-            var data = snapshot.val();
-            console.log("ACTIVE ROOM CHANGED", data);
+        onActiveRoomChanged: function(snapshot, prevChildName) {
+            // var data = snapshot.val();
+
+            console.log("ACTIVE ROOM CHANGED");
             // 
 
             fb.playersRef.once('value', function(snapshot) {
@@ -264,15 +281,25 @@
 
             fb.roomsRef.once("value", function(snapshot) {
                 var data = snapshot.val();
-                game.updateTurn(data);
+
+                if ($("#waiting").css("display") === "block") {
+                    if (!data.open) {
+                        game.startGame();
+                        game.hideDialog("waiting");
+                    }
+                } else {
+                   // game.updateTurn(data); 
+                }
+                
             });
 
         },
 
         onPlayerAdded: function(snapshot) {
             var data = snapshot.val();
-            console.log("NEW PLAYER ADDED", data);
-            game.playerChanged(data);
+            // console.log("NEW PLAYER ADDED", data);
+
+            // game.playerChanged(data);
         },
 
         onPlayerChanged: function(snapshot) {
