@@ -236,7 +236,7 @@
     },
 
     animateMove: function(i, val) {
-      challenges.runDelayedFn(i * 750, function() {
+      challenges.runDelayedFn(i * 500, function() {
         $('.' + challenges.gridClass).eq(val).addClass('active');
         challenges.runDelayedFn(250, function() {
           $('.' + challenges.gridClass).eq(val).removeClass('active');
@@ -251,7 +251,7 @@
     updateUI: function() {
       challenges.roomRef.child('players').once('value', function(s) {
         if (!s.val()) return;
-        
+
         if (Object.keys(s.val()).length === 2) {
           // When two people join, show the game board and start the timer
           $('.simon-says-lobby').hide();
@@ -310,6 +310,7 @@
       }
 
       if (challenges.steps.timeLimit === 0) {
+        challenges.isInteractive = false;
         clearInterval(challenges.gameTimer);
         challenges.gameTimer = null;
         challenges.finishGame();
@@ -326,7 +327,10 @@
     },
 
     resetChallenge: function() {
-      challengeStarted = false;
+      challenges.challengeStarted = false;
+      challenges.isInteractive = true;
+
+      challenges.currMove = [];
 
       challenges.steps = {
         starting: 3,
@@ -338,6 +342,7 @@
 
       $('.simon-says-game-timer-value').text(challenges.steps.timeLimit);
 
+      challenges.roomRef.child('moves').remove();
       challenges.roomRef.child('players').remove();
     },
 

@@ -241,6 +241,11 @@
         },
 
         miniChallengeFinished: function(gameResults) {
+            // Needs to clean up both contenders
+            challenges.runDelayedFn(250, function() {
+                challenges.resetChallenge();
+            });
+
             // this only does something if you are the one who is effected by the points
             if (board.activePlayer != game.playerId) return;
             // console.log(gameResults);
@@ -278,8 +283,6 @@
             challenges.runDelayedFn(5000, function() {
                 board.clearLadderAndSnakes();
             });
-
-            challenges.resetChallenge();
         },
 
         displayDialog: function(dialog) {
