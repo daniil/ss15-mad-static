@@ -1,6 +1,10 @@
 .simon-says-container {
   display: none;
-  width: 100%;
+  width: 100vw;
+  height: 100vh;
+  max-width: 100vh;
+  max-height: 100vw;
+  margin: 0 auto;
 }
 
 .simon-says-game {

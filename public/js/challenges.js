@@ -48,6 +48,11 @@
           challenges.processChange(s);
 
           challenges.challengeStarted = true;
+        } else {
+
+          $('#simon-says-container').hide();
+          $('#game-board').show();
+
         }
       });
 
@@ -311,8 +316,20 @@
         // console.log(snap.val());
         game.miniChallengeFinished(snap.val());
 
+        challenges.roomRef.child('players').remove();
       });
       
+      challenges.resetChallenge();
+    },
+
+    resetChallenge: function() {
+      challengeRef.steps = {
+        starting: 3,
+        roundStep: 1,
+        currStep: 3,
+        round: 0,
+        timeLimit: 60
+      };
     },
 
     runDelayedFn: function(delay, fn) {

@@ -159,6 +159,9 @@
     	},
 
         rollDice: function(value) {
+            // console.log("ROLL DICE PRE")
+            // if (board.activePlayer !== this.playerId) return;
+            // console.log("ROLL DICE POST")
             fb.postRoll(this.playerId, value);
         },
 
@@ -208,7 +211,7 @@
         },
 
         gameOver: function() {
-
+            console.log("we should do something when the game is over");
         },
 
         challengeMiniGame: function(e) {
@@ -240,6 +243,7 @@
             var spacesMoved = Math.round(gameResults.points * ratio);
 
             console.log("THIS IS THE END, MY SO CALLED FRIEND, THE END", spacesMoved);
+            fb.postRoll(this.playerId, spacesMoved);
         },
 
         displayDialog: function(dialog) {

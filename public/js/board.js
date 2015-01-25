@@ -58,10 +58,81 @@
                 tile.addClass('ladder-tile');
             }
 
+
+
+            $(".snake-tile").on("click", function() {
+                
+                var number = $(this).find(".snake").data("value");
+                var tileNum = Number($(this).attr("id").replace("tile-", ""));
+
+                for (var i = 0; i < number; i++) {
+                    if (i == 0) {
+                        $("#tile-" + board.pad(tileNum - i, 2)).addClass("snake-head");
+                    } else if (i == number - 1) {
+                        $("#tile-" + board.pad(tileNum - i, 2)).addClass("snake-tail");
+                    } else {
+                        $("#tile-" + board.pad(tileNum - i, 2)).addClass("snake-body");
+                    }
+                }
+            });
+
+            $(".ladder-tile").on("click", function() {
+
+                var number = $(this).find(".ladder").data("value");
+                var tileNum = Number($(this).attr("id").replace("tile-", ""));
+
+                for (var i = 0; i < number; i++) {
+                    if (i == 0) {
+                        $("#tile-" + board.pad(tileNum + i, 2)).addClass("ladder-tail");
+                    } else if (i == number - 1) {
+                        $("#tile-" + board.pad(tileNum + i, 2)).addClass("ladder-head");
+                    } else {
+                        $("#tile-" + board.pad(tileNum + i, 2)).addClass("ladder-body");
+                    }
+                }
+
+            });
+
             for (var i in game.activePlayers) {
                 
                 var player = game.activePlayers[i];
                 this.addPlayer(player.name, "avatar" + player.avatar, player.position);
+            }
+        },
+
+        drawLadder: function(tileId, moveAmount) {
+
+            $(".ladder-tail, .ladder-head, .ladder-body, .snake-tail, .snake-head, .snake-body").removeClass("ladder-tail ladder-head ladder-body snake-tail snake-head snake-body");
+
+            var number = moveAmount;
+            var tileNum = tileId;
+
+            for (var i = 0; i < number; i++) {
+                if (i == 0) {
+                    $("#tile-" + board.pad(tileNum + i, 2)).addClass("ladder-tail");
+                } else if (i == number - 1) {
+                    $("#tile-" + board.pad(tileNum + i, 2)).addClass("ladder-head");
+                } else {
+                    $("#tile-" + board.pad(tileNum + i, 2)).addClass("ladder-body");
+                }
+            }
+        },
+
+        drawSnake: function(tileId, moveAmount) {
+            
+            $(".ladder-tail, .ladder-head, .ladder-body, .snake-tail, .snake-head, .snake-body").removeClass("ladder-tail ladder-head ladder-body snake-tail snake-head snake-body");
+
+            var number = moveAmount;
+            var tileNum = tileId;
+
+            for (var i = 0; i < number; i++) {
+                if (i == 0) {
+                    $("#tile-" + board.pad(tileNum - i, 2)).addClass("snake-head");
+                } else if (i == number - 1) {
+                    $("#tile-" + board.pad(tileNum - i, 2)).addClass("snake-tail");
+                } else {
+                    $("#tile-" + board.pad(tileNum - i, 2)).addClass("snake-body");
+                }
             }
         },
 
@@ -149,7 +220,10 @@
 
         moveBird: function() {
             var pindex = $("#" + board.activePlayer).data("index");
-
+            
+            // console.log("pindex", pindex);
+            // console.log("board.targetIndex", board.targetIndex);
+            
             if (board.targetIndex - 1 == pindex) {
                 
                 if ($("#tile-" + board.pad(pindex + 1, 2)).hasClass("ladder-tile"))  {
