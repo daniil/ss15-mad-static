@@ -13,41 +13,45 @@
 
 .simon-says-steps {
   margin-bottom: 0.5em;
-  border: 1px solid #ecf0f1;
+  border: 1px solid #bb7415;
   margin-top: 5px;
+  padding: 5px 0;
   font-size: 1.2em;
   text-align: center;
-  color: #bdc3c7;
+  color: #aea;
 }
 
 .simon-says-steps-counter {
-  color: #34495e;
+  color: #aea;
   font-weight: bold;
 }
 
 .simon-says-score {
   float: left;
   margin-bottom: 20px;
-  color: #34495e;
+  color: #bb7415;
   font-size: 1.5em;
 }
 
 .simon-says-score-mine,
 .simon-says-score-opp {
+  display: inline-block;
+  margin-top: 10px;
   font-weight: bold;
-  color: #8e44ad;
+  color: #aea;
 }
 
 .simon-says-game-timer {
   float: right;
   margin: 0 0 20px 50px;
-  color: #34495e;
+  color: #bb7415;
   font-size: 1.5em;
   text-align: right;
 }
 
 .simon-says-game-timer-value {
-  color: #27ae60;
+  margin-top: 10px;
+  color: #aea;
   font-weight: bold;
 }
 
@@ -63,7 +67,7 @@
   float: left;
   width: calc(20% - 3px);
   height: 100px;
-  background-color: #bdc3c7;
+  background-color: #9C4E9C;
   margin: 0 3px 3px 0;
   transition: background-color 0.5s ease;
 }
@@ -77,7 +81,7 @@
 }
 
 .simon-says-grid-block.inactive {
-  background-color: #ecf0f1;
+  background-color: #5E2F5E;
 }
 
 .simon-says-grid-block:nth-child(5n+6) {

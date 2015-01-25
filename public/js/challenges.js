@@ -22,7 +22,7 @@
       roundStep: 1,
       currStep: 3,
       round: 0,
-      timeLimit: 10
+      timeLimit: 25
     },
 
     isInteractive: true,
@@ -50,8 +50,6 @@
           challenges.processChange(s);
 
           challenges.challengeStarted = true;
-
-          challenges.updateUI();
 
         } else {
 
@@ -252,12 +250,14 @@
 
     updateUI: function() {
       challenges.roomRef.child('players').once('value', function(s) {
+        if (!s.val()) return;
+        
         if (Object.keys(s.val()).length === 2) {
           // When two people join, show the game board and start the timer
           $('.simon-says-lobby').hide();
           $('.simon-says-game').show();
           
-          if (!challenges.gameTimer && challenges.challengeStarted) {
+          if (!challenges.gameTimer) {
             challenges.gameTimer = setInterval(challenges.updateGameTimer, 1000);
           }
         }
@@ -333,7 +333,7 @@
         roundStep: 1,
         currStep: 3,
         round: 0,
-        timeLimit: 60
+        timeLimit: 25
       };
 
       $('.simon-says-game-timer-value').text(challenges.steps.timeLimit);
