@@ -70,9 +70,9 @@
         } else if (challenges.currRole === 'follow') {
           // Wrong pattern, return immediately and score +1 to opponent
           if (challenges.currMove[challenges.currMove.length - challenges.steps.currStep] !== $(e.target).data('grid-id')) {
-            $(e.target).addClass('wrong');
+            $('.' + challenges.gridClass).addClass('wrong');
             challenges.runDelayedFn(500, function() {
-              $(e.target).removeClass('wrong');
+              $('.' + challenges.gridClass).removeClass('wrong');
             });
             challenges.updateScore(false);
             returnImmediate = true;
@@ -178,19 +178,19 @@
 
         challenges.isInteractive = true;
 
-        $('.simon-says-role').html('<p>You\'re in <span class="simon-says-role-type">lead</span> role. Tap out your pattern!</p>');
+        game.displayMessage('<p>It\'s your turn! Tap out your pattern!</p>');
 
       } else if (s.val().role === 'wait') {
 
         challenges.isInteractive = false;
 
-        $('.simon-says-role').html('<p>You\'re in <span class="simon-says-role-type">wait</span> role. Wait until your opponent taps out a pattern.</p>');
+        game.displayMessage('<p>Wait until your opponent taps out a pattern.</p>');
 
       } else if (s.val().role === 'follow') {
 
         challenges.isInteractive = false;
 
-        $('.simon-says-role').html('<p>You\'re in <span class="simon-says-role-type">follow</span> role. Repeat the pattern.</p>');
+        game.displayMessage('<p>Repeat the pattern.</p>');
 
       }
 
@@ -315,21 +315,21 @@
       challenges.roomRef.once("value", function(snap) {
         // console.log(snap.val());
         game.miniChallengeFinished(snap.val());
-
-        challenges.roomRef.child('players').remove();
       });
-      
-      challenges.resetChallenge();
     },
 
     resetChallenge: function() {
-      challengeRef.steps = {
+      challengeStarted = false;
+      
+      challenges.steps = {
         starting: 3,
         roundStep: 1,
         currStep: 3,
         round: 0,
         timeLimit: 60
       };
+
+      challenges.roomRef.child('players').remove();
     },
 
     runDelayedFn: function(delay, fn) {

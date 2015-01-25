@@ -66,7 +66,7 @@
     	},
 
         initBoard: function() {
-            
+
             if (this.gameIsRunning) return;
 
             $("#main-menu").fadeOut();
@@ -84,6 +84,11 @@
             this.displayDialog("waiting");
 
             $("#waiting .cta").on("click", function(e) {
+
+                if (Object.keys(game.activePlayers).length < 2) {
+                    return alert("get some friends");
+                }
+
                 game.hideDialog("waiting");
                 game.startGame();
             });
@@ -255,6 +260,8 @@
 
             console.log("THIS IS THE END, MY SO CALLED FRIEND, THE END", spacesMoved);
             fb.postRoll(this.playerId, spacesMoved);
+
+            challenges.resetChallenge();
         },
 
         displayDialog: function(dialog) {
