@@ -101,6 +101,9 @@
         },
 
         drawLadder: function(tileId, moveAmount) {
+
+            $(".ladder-tail, .ladder-head, .ladder-body, .snake-tail, .snake-head, .snake-body").removeClass("ladder-tail ladder-head ladder-body snake-tail snake-head snake-body");
+
             var number = moveAmount;
             var tileNum = tileId;
 
@@ -116,6 +119,8 @@
         },
 
         drawSnake: function(tileId, moveAmount) {
+            
+            $(".ladder-tail, .ladder-head, .ladder-body, .snake-tail, .snake-head, .snake-body").removeClass("ladder-tail ladder-head ladder-body snake-tail snake-head snake-body");
 
             var number = moveAmount;
             var tileNum = tileId;
@@ -210,8 +215,8 @@
         moveBird: function() {
             var pindex = $("#" + board.activePlayer).data("index");
             
-            console.log("pindex", pindex);
-            console.log("board.targetIndex", board.targetIndex);
+            // console.log("pindex", pindex);
+            // console.log("board.targetIndex", board.targetIndex);
             
             if (board.targetIndex - 1 == pindex) {
                 

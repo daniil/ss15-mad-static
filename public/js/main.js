@@ -150,6 +150,9 @@
     	},
 
         rollDice: function(value) {
+            // console.log("ROLL DICE PRE")
+            // if (board.activePlayer !== this.playerId) return;
+            // console.log("ROLL DICE POST")
             fb.postRoll(this.playerId, value);
         },
 
