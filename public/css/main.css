@@ -504,9 +504,11 @@ body {
         position: absolute;
         -webkit-transition: all 1s; /* For Safari 3.1 to 6.0 */
         transition: all 1s;
-        width:900px;
-        height:900px;
-    }
+        width:900px !important;
+        height:900px !important;
+        max-width:900px !important;
+        max-height:900px !important;
+    }   
 
     #players {
         width:900px;
