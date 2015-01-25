@@ -18,18 +18,18 @@
   padding: 5px 0;
   font-size: 1.2em;
   text-align: center;
-  color: #aea;
+  color: #fefefe;
 }
 
 .simon-says-steps-counter {
-  color: #aea;
+  color: #fefefe;
   font-weight: bold;
 }
 
 .simon-says-score {
   float: left;
   margin-bottom: 20px;
-  color: #bb7415;
+  color: #fefefe;
   font-size: 1.5em;
 }
 
@@ -38,29 +38,29 @@
   display: inline-block;
   margin-top: 10px;
   font-weight: bold;
-  color: #aea;
+  color: #fefefe;
 }
 
 .simon-says-game-timer {
   float: right;
   margin: 0 0 20px 50px;
-  color: #bb7415;
+  color: #fefefe;
   font-size: 1.5em;
   text-align: right;
 }
 
 .simon-says-game-timer-value {
   margin-top: 10px;
-  color: #aea;
+  color: #fefefe;
   font-weight: bold;
 }
 
 .simon-says-game-timer-value.caution {
-  color: #f39c12;
+  color: #F24141;
 }
 
 .simon-says-game-timer-value.warning {
-  color: #c0392b;
+  color: #F24150;
 }
 
 .simon-says-grid-block {
