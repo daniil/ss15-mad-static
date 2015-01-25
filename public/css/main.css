@@ -55,9 +55,9 @@ textarea {
 
 body {
     background-color: white;
-    font-family: Arial, Helvetica, sans-serif;
+    /*//font-family: Arial, Helvetica, sans-serif;*/
     margin: 0;
-    /*font-family: "courier new",monospace;*/
+    font-family: "courier new",monospace;
     font-size: 16px;
     line-height: 16px;
     padding: 0;
@@ -666,6 +666,14 @@ body {
         position: absolute;
         overflow: scroll;
         pointer-events:none;
+    }
+
+    #dialogs .dialog {
+        box-sizing: border-box;
+        left:0;
+        width:100%;
+        padding:1em;
+
     }
 
 }
