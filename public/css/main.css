@@ -189,7 +189,8 @@ body {
     position:absolute;
 }
 
-.snake-tile { background: transparent url(../img/snake-tile.png) left top no-repeat; }
+.snake-tile { background: transparent url(../img/icon-snake.png) left top no-repeat; }
+.ladder-tile { background: transparent url(../img/icon-ladder.png) left top no-repeat; }
 
 #activePlayers li div {
     position: relative; 

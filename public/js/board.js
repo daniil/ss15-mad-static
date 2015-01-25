@@ -111,22 +111,13 @@
             
             $("#players").append(playerDiv);
 
-            // if (avatar == "avatar0") {
-                // console.log($('#' + playerId));
-                $('#' + playerId).sprite({
-                    fps: 12,
-                    no_of_frames: 5
-                });
-
-                
-            // }
-            
-            // $('#' + playerId).on("click", function(event) {
-                
-            // });
+            $('#' + playerId).sprite({
+                fps: 12,
+                no_of_frames: 5
+            });
 
             this.getTileArm(position);
-            this.setBirdToTile(position);
+            this.setPlayerToTile(position);
             
             var paddedTile = this.pad(position+ 1, 2) ;
 
@@ -135,15 +126,19 @@
 
         },
 
-        movePlayer: function(playerId, targetIndex) {
+        moveMe: function(playerId, targetIndex) {
 
             this.activePlayer = playerId;
+            if (targetIndex < 0) {
+                targetIndex = $("#" + playerId).data("index") + targetIndex;
+            }
+
             this.targetIndex = targetIndex;
             // console.log($("#" + playerId))
 
             // $("#" + this.activePlayer).spPlay();
             $("#" + playerId).spStart();
-            this.moveBird();
+            this.movePlayer();
         },
 
         goToEndBackwards: function() {
@@ -151,22 +146,22 @@
 
             var tile_tally = 81;
 
-            for (var i = this.tileArmLength -1; i >= 0; i--) {
+            for (var j = this.tileArmLength.length -1; j >= 0; j--) {
                 console.log(tile_tally, pindex);
                 if (tile_tally < pindex) {
 
                     var tile_end = tile_tally;
                     
                     if (pindex == tile_end) {
-                        tile_end -= this.tileArmLength[i];
+                        tile_end -= this.tileArmLength[j];
                     }
 
-                    this.setBirdToTile(tile_end);
+                    this.setPlayerToTile(tile_end);
 
                     break;
                 }
 
-                tile_tally -= this.tileArmLength[i];
+                tile_tally -= this.tileArmLength[j];
             }
         },
 
@@ -190,7 +185,7 @@
                         tile_end += this.tileArmLength[i];
                     }
 
-                    this.setBirdToTile(tile_end);
+                    this.setPlayerToTile(tile_end);
 
                     break;
                 }
@@ -198,7 +193,7 @@
             }
         },
 
-        setBirdToTile: function(tile) {
+        setPlayerToTile: function(tile) {
 
             this.player_index = tile;
             $("#" + this.activePlayer).data("index", tile);
@@ -210,22 +205,20 @@
 					left: $("#tile-" + this.pad(tile, 2)).css("left"),
 					top: $("#tile-" + this.pad(tile, 2)).css("top"),
 					ease: Linear.easeOut,
-					onComplete: this.moveBird
+					onComplete: this.movePlayer
 				});
 			} else {
 				TweenMax.to($("#" + this.activePlayer), 1, {
 					left: $("#tile-" + this.pad(tile, 2)).offset().left,
 					top: $("#tile-" + this.pad(tile, 2)).offset().top,
 					ease: Linear.easeOut,
-					onComplete: this.moveBird
+					onComplete: this.movePlayer
 				});
 			}
 
-
-
         },
 
-        moveBird: function() {
+        movePlayer: function() {
             var pindex = $("#" + board.activePlayer).data("index");
             
             // console.log(pindex, board.targetIndex);
@@ -246,10 +239,11 @@
             
             if (board.getTileArm(pindex) == board.getTileArm(board.targetIndex)) {
                 // console.log("Go Directly");
-                board.setBirdToTile(board.targetIndex - 1);
+                board.setPlayerToTile(board.targetIndex - 1);
 
             } else {
                 // console.log("Go to end");
+                console.log(board.targetIndex, pindex);
                 if (board.targetIndex < pindex){
                     board.goToEndBackwards();
                 } else {
@@ -290,7 +284,7 @@
                     }
                     tile_tally -= this.tileArmLength[i];
                     // console.log(tile_end);
-                    //setBirdToTile(tile_end-1);
+                    //setPlayerToTile(tile_end-1);
                     break;
                 }
             }

@@ -113,7 +113,7 @@
 
     	playerChanged: function(data) {
     		// var playerId = data.name;
-    		board.movePlayer(data.name, data.position)
+    		board.moveMe(data.name, data.position)
     	},
 
         playerAdded: function(data) {
