@@ -106,21 +106,20 @@
             var playerDiv = $("<div data-index='" + position + "' id='" + playerId + "' class='" + avatar + "'>");
             
             $("#players").append(playerDiv);
-console.log(avatar);
-            if (avatar == "avatar0") {
 
-                console.log("sprite");
-
+            // if (avatar == "avatar0") {
+                // console.log($('#' + playerId));
                 $('#' + playerId).sprite({
                     fps: 12,
                     no_of_frames: 5
                 });
-            }
-            // $(this).spStop();
+
+                
+            // }
+            
             // $('#' + playerId).on("click", function(event) {
                 
             // });
-
 
             this.getTileArm(position);
             this.setBirdToTile(position);
@@ -136,7 +135,10 @@ console.log(avatar);
 
             this.activePlayer = playerId;
             this.targetIndex = targetIndex;
-
+            // console.log($("#" + playerId))
+            
+            // $("#" + this.activePlayer).spPlay();
+            $("#" + playerId).spStart();
             this.moveBird();
         },
 
@@ -208,6 +210,7 @@ console.log(avatar);
                 } else if ($("#tile-" + board.pad(pindex + 1, 2)).hasClass("snake-tile"))  {
                     game.landedOnSnake($("#tile-" + board.pad(pindex + 1, 2)).find(".snake").data("value"));
                 } else {
+                    $("#" + board.activePlayer).spStop(true);
                     game.turnComplete(board.activePlayer);    
                 }
                 
