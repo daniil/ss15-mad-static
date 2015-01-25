@@ -159,7 +159,7 @@ body {
 }
 
 .avatar1{
-    background:url(../img/gamepiece-yellow.png);
+    background:url(../img/gamepiece-yellow-ss.png);
     width: 100px;
     height: 100px;
     display:block;  
@@ -167,7 +167,7 @@ body {
 }
 
 .avatar2{
-    background:url(../img/gamepiece-red.png);
+    background:url(../img/gamepiece-red-ss.png);
     width: 100px;
     height: 100px;
     display:block;  
@@ -175,7 +175,7 @@ body {
 }
 
 .avatar3{
-    background:url(../img/gamepiece-pink.png);
+    background:url(../img/gamepiece-pink-ss.png);
     width: 100px;
     height: 100px;
     display:block;  
