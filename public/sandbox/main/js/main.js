@@ -110,6 +110,10 @@
     		$("#legend-" + data.order[data.currentPlayerTurn]).addClass("active");
     	},
 
+        rollDice: function(value) {
+            fb.postRoll(this.playerId, value);
+        },
+
     	initGame: function() {
     		
     		board.init();

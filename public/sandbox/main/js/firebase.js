@@ -202,24 +202,24 @@
         postRoll: function(playerId, rollAmount) {
 
             // var playersRef = new Firebase(playerUrl);
-            this.playersRef.child(roomId).child(playerId).once('value', function(snapshot) {
+            this.playersRef.child(playerId).once('value', function(snapshot) {
                 var obj = snapshot.val();
                 obj.position += rollAmount;
-                playersRef.child(roomId).child(playerId).set(obj);
+                fb.playersRef.child(playerId).set(obj);
             });
 
         },
 
         movePlayer: function(playerId, moveAmount) {
-            this.playersRef.child(roomId).child(playerId).once('value', function(snapshot) {
+            fb.playersRef.child(playerId).once('value', function(snapshot) {
                 var obj = snapshot.val();
                 obj.position += moveAmount;
-                playersRef.child(roomId).child(playerId).set(obj);
+                fb.playersRef.child(playerId).set(obj);
             });
         },
 
         joinRoom: function(playerId) {
-
+            
         },
 
         onActiveRoomChanged: function(snapshot) {
@@ -231,11 +231,11 @@
                 game.activePlayers = snapshot.val();
                 game.showPlayersInRoom();
             });
+
             fb.roomsRef.once("value", function(snapshot) {
                 var data = snapshot.val();
                 game.updateTurn(data);
             });
-
 
         },
 
