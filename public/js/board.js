@@ -126,7 +126,7 @@
 
         },
 
-        movePlayer: function(playerId, targetIndex) {
+        moveMe: function(playerId, targetIndex) {
 
             this.activePlayer = playerId;
             if (targetIndex < 0) {
