@@ -128,6 +128,8 @@
     		
     		board.init();
 
+            challenges.init();
+
     		$("#main-menu").hide();
     		$("#game-board").show();
 
