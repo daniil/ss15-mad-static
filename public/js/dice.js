@@ -7,28 +7,35 @@
         totalY: 0,
 
         enableRoll: function() {
+
+            // TODO: adjust the content of the window depending on the capabilities of the device
+
             if (window.DeviceMotionEvent != undefined) {
                 window.ondevicemotion = function(e) {
-
                     dice.maxX = Math.max(Math.abs(event.acceleration.x), dice.maxX);
                     dice.maxY = Math.max(Math.abs(event.acceleration.y), dice.maxY);
                 }
-            } else {
-                // TODO: build alternate to shake
-                alert("SHAKING NOT SUPPORTED ON YOUR BROWSER");
+
+                 //create a new instance of shake.js.
+                var myShakeEvent = new Shake({
+                    threshold: 30
+                });
+
+                // start listening to device motion
+                myShakeEvent.start();
+
+                // register a shake event
+                window.addEventListener('shake', dice.shakeEventDidOccur, false);
             }
 
-            //create a new instance of shake.js.
-            var myShakeEvent = new Shake({
-                threshold: 30
-            });
+            $("#roll").on("click", dice.manualShake);
+        },
 
-            // start listening to device motion
-            myShakeEvent.start();
-
-            // register a shake event
-            window.addEventListener('shake', dice.shakeEventDidOccur, false);
-
+        manualShake: function() {
+            dice.maxX = Math.random() * 40;
+            dice.maxY = Math.random() * 40;
+                
+            dice.shakeEventDidOccur();
         },
 
         //shake event callback
@@ -36,11 +43,14 @@
             var number = Math.ceil(dice.randomDieNumber(dice.maxX + dice.maxY) * 6);
             game.displayMessage("you rolled a " + number);
             game.rollDice(number);
+
             dice.disableRoll();
         },
 
         disableRoll: function() {
+            game.hideDialog('roll-dice');
         	try {
+                $("#roll").off("click", dice.manualShake);
         		window.removeEventListener('shake', dice.shakeEventDidOccur, false);
            		window.ondevicemotion = null;	
         	} catch (e) {
