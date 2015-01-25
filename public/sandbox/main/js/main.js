@@ -130,10 +130,16 @@
     		
     		board.init();
 
+            challenges.init();
+
     		$("#main-menu").hide();
     		$("#game-board").show();
 
     	},
+
+        challengePlayer: function(player1Id, player2Id) {
+            challenges.startChallenge(player1Id, player2Id);
+        },
 
     	displayMessage: function(message) {
             if ($("#message").hasClass("error")) $("#message").removeClass("error");

@@ -1,0 +1,75 @@
+.simon-says-container {
+  display: none;
+}
+
+.simon-says-game {
+  display: none;
+}
+
+.simon-says-steps {
+  margin-bottom: 1em;
+  font-size: 1.2em;
+  color: #34495e;
+}
+
+.simon-says-steps-counter {
+  font-weight: bold;
+}
+
+.simon-says-score {
+  display: inline-block;
+  margin-bottom: 20px;
+  color: #34495e;
+  font-size: 1.5em;
+}
+
+.simon-says-score-mine,
+.simon-says-score-opp {
+  font-weight: bold;
+  color: #8e44ad;
+}
+
+.simon-says-game-timer {
+  display: inline-block;
+  margin: 0 0 20px 50px;
+  color: #34495e;
+  font-size: 1.5em;
+}
+
+.simon-says-game-timer-value {
+  color: #27ae60;
+  font-weight: bold;
+}
+
+.simon-says-game-timer-value.caution {
+  color: #f39c12;
+}
+
+.simon-says-game-timer-value.warning {
+  color: #c0392b;
+}
+
+.simon-says-grid-block {
+  float: left;
+  width: 100px;
+  height: 100px;
+  background-color: #bdc3c7;
+  margin: 0 3px 3px 0;
+  transition: background-color 0.5s ease;
+}
+
+.simon-says-grid-block.active {
+  background-color: #2ecc71;
+}
+
+.simon-says-grid-block.wrong {
+  background-color: #e74c3c;
+}
+
+.simon-says-grid-block.inactive {
+  background-color: #ecf0f1;
+}
+
+.simon-says-grid-block:nth-child(5n+6) {
+  clear: left;
+}

@@ -8,6 +8,7 @@
         roomUrl: 'https://snl-room.firebaseio.com/game/rooms',
         playerUrl: 'https://snl-room.firebaseio.com/game/players',
         moveUrl: 'https://snl-room.firebaseio.com/game/moves',
+        challengeUrl: 'https://snl-room.firebaseio.com/game/challenges',
 
         playersRef: null, //new Firebase(this.playerUrl),
         roomsRef: null,
