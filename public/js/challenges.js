@@ -30,8 +30,6 @@
     gameTimer: null,
 
     init: function() {
-      var grid = '';
-
       challenges.roomRef = challenges.challengeRef.child(game.roomId);
 
       challenges.playerRef = challenges.roomRef.child('players').child(game.playerId);
@@ -41,23 +39,18 @@
           if (!challenges.challengeStarted) {
             challenges.initEvents();
             challenges.initMoves();
+            challenges.generateHtml();
           }
 
           $('#simon-says-container').show();
           $('#game-board').hide();
 
           challenges.processChange(s);
-          updateUI();
 
           challenges.challengeStarted = true;
         }
       });
 
-      for (var i = 0; i < 25; i++) {
-        grid += '<div class="' + challenges.gridClass + '" id="' + challenges.gridClass + '_' + i + '" data-grid-id="' + i + '"></div>';
-      }
-
-      challenges.$container.html(grid);
       challenges.updateStepsUI();
     },
 
@@ -99,6 +92,11 @@
         }
         
       });
+
+      $(window).off('resize.simon-says').on('resize.simon-says', function() {
+        var $gridBlock = $('.simon-says-grid-block')
+        $gridBlock.height($gridBlock.innerWidth());
+      });
     },
 
     initMoves: function() {
@@ -134,6 +132,19 @@
       });
 
       challenges.roomRef.child('moves').onDisconnect().remove();
+    },
+
+    generateHtml: function() {
+      var grid = '';
+
+      for (var i = 0; i < 25; i++) {
+        grid += '<div class="' + challenges.gridClass + '" id="' + challenges.gridClass + '_' + i + '" data-grid-id="' + i + '"></div>';
+      }
+
+      challenges.$container.html(grid);
+      challenges.runDelayedFn(100, function() {
+        $(window).trigger('resize.simon-says');
+      });
     },
 
     startChallenge: function(player1Id, player2Id, points) {
@@ -272,6 +283,7 @@
               });
             }
           }
+          challenges.updateUI();
         });
       });
     },
