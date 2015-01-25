@@ -10,8 +10,8 @@
             if (window.DeviceMotionEvent != undefined) {
                 window.ondevicemotion = function(e) {
 
-                    maxX = Math.max(Math.abs(event.acceleration.x), maxX);
-                    maxY = Math.max(Math.abs(event.acceleration.y), maxY);
+                    dice.maxX = Math.max(Math.abs(event.acceleration.x), dice.maxX);
+                    dice.maxY = Math.max(Math.abs(event.acceleration.y), dice.maxY);
                 }
             } else {
                 // TODO: build alternate to shake
@@ -31,14 +31,19 @@
 
         },
 
-
         //shake event callback
         shakeEventDidOccur: function() {
             var number = Math.ceil(this.randomDieNumber(this.maxX + this.maxY) * 6);
-            $("#die-value").html(number);
+            alert("you rolled a " + number);
+        },
 
-            window.removeEventListener('shake', dice.shakeEventDidOccur, false);
-            window.ondevicemotion = null;
+        disableRoll: function() {
+        	try {
+        		window.removeEventListener('shake', dice.shakeEventDidOccur, false);
+           		window.ondevicemotion = null;	
+        	} catch (e) {
+        		console.log("error disable roll");
+        	}
 
         },
 

@@ -95,11 +95,13 @@
             // console.log("ASDASDAS", data)
     		this.updateOrder(data);
 
-
     		var player = data.order[data.currentPlayerTurn];
     		if (player == game.playerId) {
-    			alert('it is your turn');
-    		}
+    			alert('it is your turn ' + game.playerId);
+                dice.enableRoll();
+    		} else {
+                dice.disableRoll();
+            }
     	},
 
     	updateOrder: function(data) {
