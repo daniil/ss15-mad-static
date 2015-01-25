@@ -99,6 +99,10 @@
 
     	},
 
+        challengePlayer: function(player1Id, player2Id) {
+            challenges.startChallenge(player1Id, player2Id);
+        },
+
     	displayMessage: function(message) {
             if ($("#message").hasClass("error")) $("#message").removeClass("error");
             $("#message").html(message);
