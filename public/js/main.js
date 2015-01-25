@@ -156,6 +156,7 @@
         },
 
         turnComplete: function(playersTurn) {
+
             // console.log(playersTurn, this.playerId);
             if (playersTurn == this.playerId) {
                 fb.nextTurn(this.playerId);
@@ -202,8 +203,26 @@
         },
 
         challengePlayer: function(player1Id, player2Id, pointValue) {
-            console.log("POINTS AVAILABLE", pointValue);
-            challenges.startChallenge(player1Id, player2Id);
+            challenges.startChallenge(player1Id, player2Id, pointValue);
+        },
+
+        miniChallengeFinished: function(gameResults) {
+            // this only does something if you are the one who is effected by the points
+            if (board.activePlayer != game.playerId) return;
+            
+            var players = Object.getOwnPropertyNames(gameResults.players);
+            var me = game.playerId;
+            var you = players[1 - players.indexOf(game.playerId)];
+
+            var totalScore = gameResults.players[me].score + gameResults.players[you].score;
+            var ratio = 0; // this stays if you are bad at the game
+
+            if (gameResults.players[me].score !== 0) {
+                // improve the ration
+                ratio = gameResults.players[me].score / totalScore;
+            }
+
+            console.log("THIS IS THE END, MY SO CALLED FRIEND, THE END", me, you, totalScore, ratio);
         },
 
         displayDialog: function(dialog) {

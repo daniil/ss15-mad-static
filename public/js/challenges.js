@@ -136,7 +136,7 @@
       challenges.roomRef.child('moves').onDisconnect().remove();
     },
 
-    startChallenge: function(player1Id, player2Id) {
+    startChallenge: function(player1Id, player2Id, points) {
       var playersObj = {};
 
       playersObj[player1Id] = {
@@ -150,7 +150,8 @@
       };
 
       challenges.roomRef.set({
-        players: playersObj
+        players: playersObj,
+        points: points
       });
     },
 
@@ -293,6 +294,13 @@
 
     finishGame: function() {
       console.log('GAME FINISHED');
+
+      challenges.roomRef.once("value", function(snap) {
+        // console.log(snap.val());
+        game.miniChallengeFinished(snap.val());
+
+      });
+      
     },
 
     runDelayedFn: function(delay, fn) {
